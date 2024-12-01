@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "930992715418",
+    "project_id": "jong-ming-wedding",
+    "storage_bucket": "jong-ming-wedding.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930992715418:android:2b0d2fa70c1c25a5955123",
+        "android_client_info": {
+          "package_name": "ming.jong.wedding"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApfE-I8GmhDpf_i5zd0ZVtCjWjEVgKxCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
