@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
 import 'package:wedding/screen/main/tabs/event/event_tab_viewmodel.dart';
+import 'package:wedding/screen/picture/picture_screen.dart';
 
 class EventTabScreen extends ConsumerStatefulWidget {
   const EventTabScreen({super.key});
@@ -34,16 +35,17 @@ class _EventTabScreen extends ConsumerState<EventTabScreen> {
                   itemBuilder: (context, index) {
                     final item = eventState.event.items[index];
                     return ListTile(
+                      leading: getItemIcon(item.type),
                       title: Text(item.title),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () {
                         switch (item.type) {
                           case 'greeting':
-                            ;
+                            Navigator.of(context, rootNavigator: true).pushNamed('/greeting');
                           case 'quiz':
-                            ;
+                            Navigator.of(context, rootNavigator: false).pushNamed('/quiz');
                           case 'picture':
-                            ;
+                            Navigator.of(context, rootNavigator: false).pushNamed('/picture');
                         }
                       },
                     );
@@ -85,4 +87,17 @@ class _EventTabScreen extends ConsumerState<EventTabScreen> {
           ],
         ),
       );
+
+  Widget getItemIcon(String type) {
+    switch (type) {
+      case 'greeting':
+        return const Icon(Icons.message);
+      case 'quiz':
+        return const Icon(Icons.question_mark);
+      case 'picture':
+        return const Icon(Icons.image);
+      default:
+        return const SizedBox.shrink();
+    }
+  }
 }
