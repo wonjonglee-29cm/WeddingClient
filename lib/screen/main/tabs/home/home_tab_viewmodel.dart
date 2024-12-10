@@ -1,27 +1,26 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wedding/data/raw/home_raw.dart';
 import 'package:wedding/data/repository/home_repository.dart';
 
-sealed class HomeState {
-  const HomeState();
+sealed class HomeTabState {
+  const HomeTabState();
 }
 
-class Loading extends HomeState {
+class Loading extends HomeTabState {
   const Loading();
 }
 
-class Success extends HomeState {
+class Success extends HomeTabState {
   final List<HomeRaw> items;
 
   Success({required this.items});
 }
 
 // home_view_model.dart
-class HomeViewModel extends StateNotifier<HomeState> {
+class HomeTabViewModel extends StateNotifier<HomeTabState> {
   final HomeRepository _repository;
-  HomeViewModel(this._repository) : super(const Loading()) {
+  HomeTabViewModel(this._repository) : super(const Loading()) {
     loadItems();
   }
 

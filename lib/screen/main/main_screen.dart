@@ -21,10 +21,21 @@ class MainScreen extends ConsumerWidget {
     return Scaffold(
       body: SafeArea(child: _screens[currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
+        selectedIconTheme: const IconThemeData(
+          size: 24,
+        ),
+        unselectedIconTheme: const IconThemeData(
+          size: 22,
+        ),
+        selectedFontSize: 14,
+        unselectedFontSize: 12,
+        selectedItemColor: Colors.blueGrey,
+        backgroundColor: Colors.white,
+        elevation: 10,
         currentIndex: currentIndex,
         onTap: (index) => ref.read(mainViewModelProvider.notifier).updateIndex(index),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '메인'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
           BottomNavigationBarItem(icon: Icon(Icons.event), label: '이벤트'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: '내 정보'),
         ],

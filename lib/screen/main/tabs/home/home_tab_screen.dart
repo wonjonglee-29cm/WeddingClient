@@ -6,6 +6,7 @@ import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wedding/data/raw/home_raw.dart';
+import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
 import 'package:wedding/screen/main/tabs/home/home_tab_viewmodel.dart';
 
@@ -22,22 +23,14 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
     super.initState();
   }
 
-  SizedBox smallGap = const SizedBox(height: 4);
-  SizedBox defaultGap = const SizedBox(height: 8);
-  SizedBox itemsGap = const SizedBox(height: 24);
-
-  final TextStyle largeBoldTitleStyle = const TextStyle(fontSize: 32, fontWeight: FontWeight.bold);
-  final TextStyle titleStyle = const TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
-  final TextStyle descriptionStyle = const TextStyle(fontSize: 12);
-  final TextStyle boldDescriptionStyle = const TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
-
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(homeViewModelProvider);
+    final state = ref.watch(homeTabViewModelProvider);
 
     return switch (state) {
       Loading() => loading(),
       Success() => Scaffold(
+          backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -58,21 +51,35 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
                           ParkingRaw(:final title) => titleWidget(
                               title,
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  height: 300,
-                                  child: mapWidget(item),
-                                )),
-                              ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    height: 300,
+                                    child: mapWidget(item),
+                                  )),
+                            ),
                           PlaceRaw(:final address, :final hall, :final title) => titleWidget(
                               title,
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(hall, style: boldDescriptionStyle),
-                                  const SizedBox(width: 8),
-                                  Text(address, style: descriptionStyle),
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(hall, style: boldDescriptionStyle),
+                                        const SizedBox(width: 8),
+                                        Text(address, style: descriptionStyle),
+                                      ],
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.copy, size: 20),
+                                    onPressed: () {
+                                      copyClipboard(context, address, '주소가 복사되었습니다');
+                                    },
+                                  ),
                                 ],
                               )),
                         })
@@ -158,6 +165,7 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
       children: [
         Text(couple.name, style: boldDescriptionStyle),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               child: Text(couple.account, style: descriptionStyle),
@@ -165,11 +173,7 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
             IconButton(
               icon: const Icon(Icons.copy, size: 20),
               onPressed: () {
-                // 클립보드에 계좌번호 복사
-                Clipboard.setData(ClipboardData(text: couple.account));
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('계좌번호가 복사되었습니다')),
-                );
+                copyClipboard(context, couple.account, '계좌번호가 복사되었습니다');
               },
             ),
           ],
@@ -225,5 +229,18 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
         },
       );
     }
+  }
+
+  void copyClipboard(BuildContext context, String copyText, String snackBarText) {
+    // 클립보드에 계좌번호 복사
+    Clipboard.setData(ClipboardData(text: copyText));
+
+    // 스낵바 표시
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(snackBarText),
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 }

@@ -43,7 +43,8 @@ class WeddingApp extends StatelessWidget {
     return MaterialApp(
       title: 'Wedding Invitation',
       theme: ThemeData(
-        primarySwatch: Colors.pink,
+        primaryColor: Colors.white70,
+        primarySwatch: Colors.blueGrey,
         fontFamily: 'NotoSans',
       ),
       home: const IntroScreen(),

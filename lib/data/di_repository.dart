@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wedding/data/di_preference.dart';
+import 'package:wedding/data/repository/event_repository.dart';
 import 'package:wedding/data/repository/home_repository.dart';
 import 'package:wedding/data/repository/member_repository.dart';
 
@@ -15,4 +16,7 @@ final memberRepositoryProvider = Provider<MemberRepository>((ref) {
 
 final homeRepositoryProvider = Provider<HomeRepository>((ref) {
   return HomeRepository(FirebaseFirestore.instance);
+});
+final eventRepositoryProvider = Provider<EventRepository>((ref) {
+  return EventRepository(FirebaseFirestore.instance);
 });
