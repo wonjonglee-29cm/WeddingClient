@@ -17,7 +17,6 @@ class Success extends HomeTabState {
   Success({required this.items});
 }
 
-// home_view_model.dart
 class HomeTabViewModel extends StateNotifier<HomeTabState> {
   final HomeRepository _repository;
   HomeTabViewModel(this._repository) : super(const Loading()) {

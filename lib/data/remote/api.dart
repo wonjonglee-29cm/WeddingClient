@@ -59,4 +59,14 @@ class Api {
       'refreshToken': refreshToken,
     });
   }
+
+  static Future<Response> getQuizzes() async {
+    final dio = await getDio();
+    return dio.get('/api/quiz');
+  }
+
+  static Future<Response> getAnswers(int userId) async {
+    final dio = await getDio();
+    return dio.get('/api/quiz/answers', queryParameters: {'userId': userId});
+  }
 }

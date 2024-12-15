@@ -4,6 +4,7 @@ import 'package:wedding/screen/intro/intro_viewmodel.dart';
 import 'package:wedding/screen/main/main_viewmodel.dart';
 import 'package:wedding/screen/main/tabs/event/event_tab_viewmodel.dart';
 import 'package:wedding/screen/main/tabs/home/home_tab_viewmodel.dart';
+import 'package:wedding/screen/quiz/quiz_viewmodel.dart';
 import 'package:wedding/screen/signin/signin_viewmodel.dart';
 
 import 'userinfo/user_info_viewmodel.dart';
@@ -33,4 +34,9 @@ final homeTabViewModelProvider = StateNotifierProvider<HomeTabViewModel, HomeTab
 final eventTabViewModelProvider = StateNotifierProvider<EventTabViewModel, EventTabState>((ref) {
   final repository = ref.watch(eventRepositoryProvider);
   return EventTabViewModel(repository);
+});
+
+final quizViewModelProvider = StateNotifierProvider<QuizViewModel, QuizState>((ref) {
+  final repository = ref.watch(quizRepositoryProvider);
+  return QuizViewModel(repository);
 });

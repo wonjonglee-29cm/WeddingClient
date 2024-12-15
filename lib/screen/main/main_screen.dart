@@ -5,9 +5,11 @@ import 'package:wedding/screen/main/tabs/event/event_tab_screen.dart';
 import 'package:wedding/screen/main/tabs/home/home_tab_screen.dart';
 import 'package:wedding/screen/main/tabs/my/my_tab_screen.dart';
 import 'package:wedding/screen/picture/picture_screen.dart';
+import 'package:wedding/screen/quiz/quiz_screen.dart';
 
 class MainScreen extends ConsumerWidget {
   final int? initialTab;
+
   const MainScreen({this.initialTab, super.key});
 
   static final List<Widget> _screens = [
@@ -15,12 +17,18 @@ class MainScreen extends ConsumerWidget {
     Navigator(
       key: const ValueKey('event-navigator'),
       onGenerateRoute: (settings) {
-        if (settings.name == '/picture') {
-          return MaterialPageRoute(
-            builder: (context) => const PictureScreen(),
-          );
+        switch (settings.name) {
+          case '/picture':
+            return MaterialPageRoute(
+              builder: (context) => const PictureScreen(),
+            );
+          case '/quiz':
+            return MaterialPageRoute(
+              builder: (context) => const QuizScreen(),
+            );
+          default:
+            return MaterialPageRoute(builder: (context) => const EventTabScreen());
         }
-        return MaterialPageRoute(builder: (context) => const EventTabScreen());
       },
     ),
     const MyTabScreen(),
@@ -28,7 +36,6 @@ class MainScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     if (initialTab != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(mainViewModelProvider.notifier).updateIndex(initialTab!);
