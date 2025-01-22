@@ -7,6 +7,8 @@ class QuizzesRaw {
     required this.items,
   });
 
+  bool get isAllDone => items.every((quiz) => quiz.isDone);
+
   factory QuizzesRaw.fromJson(Map<String, dynamic> json, List<int> doneIds) {
     return QuizzesRaw(
       count: json['count'] as int,
@@ -30,5 +32,19 @@ class QuizRaw {
 
   factory QuizRaw.fromJson(Map<String, dynamic> json, List<int> doneIds) {
     return QuizRaw(id: json['id'] as int, question: json['question'] as String, options: List<String>.from(json['options'] as List), isDone: doneIds.contains(json['id'] as int));
+  }
+
+  QuizRaw copyWith({
+    int? id,
+    String? question,
+    List<String>? options,
+    bool? isDone,
+  }) {
+    return QuizRaw(
+      id: id ?? this.id,
+      question: question ?? this.question,
+      options: options ?? this.options,
+      isDone: isDone ?? this.isDone,
+    );
   }
 }

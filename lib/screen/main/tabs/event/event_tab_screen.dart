@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wedding/data/raw/event_raw.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
 import 'package:wedding/screen/main/tabs/event/event_tab_viewmodel.dart';
@@ -28,7 +29,7 @@ class _EventTabScreen extends ConsumerState<EventTabScreen> {
         Success() => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              timerBanner(eventState.event.getTimeRemaining()),
+              eventBanner(eventState.event),
               Expanded(
                 child: ListView.builder(
                   itemCount: eventState.event.items.length,
@@ -70,23 +71,45 @@ class _EventTabScreen extends ConsumerState<EventTabScreen> {
                 )),
       );
 
-  Widget timerBanner(String timerText) => Container(
+  Widget eventBanner(EventRaw event) {
+    if (event.isEnd) {
+      return Container(
         width: double.infinity,
         color: Colors.black,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             defaultGap,
-            const Text('경품 응모까지 남은 시간', style: whiteDescriptionStyle),
             smallGap,
-            Text(
-              timerText,
+            const Text(
+              '당첨여부 확인하기',
               style: whiteTitleStyle,
             ),
+            smallGap,
             defaultGap,
           ],
         ),
       );
+    }
+
+    return Container(
+      width: double.infinity,
+      color: Colors.black,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          defaultGap,
+          const Text('경품 응모까지 남은 시간', style: whiteDescriptionStyle),
+          smallGap,
+          Text(
+            event.getTimeRemaining(),
+            style: whiteTitleStyle,
+          ),
+          defaultGap,
+        ],
+      ),
+    );
+  }
 
   Widget getItemIcon(String type) {
     switch (type) {

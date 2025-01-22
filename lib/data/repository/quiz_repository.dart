@@ -20,4 +20,11 @@ class QuizRepository {
 
     return quizzes;
   }
+
+  Future<void> submitQuizAnswer(int quizId, int answerOrder) async {
+    final userId = _prefs.getInt('id');
+    assert(userId != null, 'User ID is null');
+
+    await Api.postAnswer(QuizAnswerRequestRaw(quizId: quizId, userId: userId!, answerOrder: answerOrder));
+  }
 }

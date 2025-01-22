@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wedding/data/raw/quiz_answers_raw.dart';
 import 'package:wedding/data/raw/signin_raw.dart';
 import 'package:wedding/data/raw/user_info_raw.dart';
 import 'package:wedding/data/remote/auth_interceptor.dart';
@@ -68,5 +69,10 @@ class Api {
   static Future<Response> getAnswers(int userId) async {
     final dio = await getDio();
     return dio.get('/api/quiz/answers', queryParameters: {'userId': userId});
+  }
+
+  static Future<Response> postAnswer(QuizAnswerRequestRaw answer) async {
+    final dio = await getDio();
+    return dio.post('/api/quiz/answer', data: answer.toJson());
   }
 }

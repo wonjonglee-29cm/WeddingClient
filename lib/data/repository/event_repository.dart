@@ -48,6 +48,7 @@ class EventRepository {
       ));
     }
     items.sort((a, b) => a.index.compareTo(b.index));
-    return EventRaw(timestamp, items);
+    final difference = timestamp.toDate().difference(DateTime.now());
+    return EventRaw(timestamp, items, difference.isNegative);
   }
 }

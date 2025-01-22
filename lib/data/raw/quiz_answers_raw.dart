@@ -31,3 +31,21 @@ class QuizAnswerRaw {
     );
   }
 }
+
+class QuizAnswerRequestRaw {
+  final int quizId;
+  final int userId;
+  final int answerOrder;
+
+  QuizAnswerRequestRaw({
+    required this.quizId,
+    required this.userId,
+    required this.answerOrder,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'quizId': quizId,
+        'userId': userId,
+        'answerOrder': answerOrder,
+      };
+}

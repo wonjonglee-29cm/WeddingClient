@@ -3,8 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class EventRaw {
   final Timestamp endDate;
   final List<EventItemRaw> items;
+  final bool isEnd;
 
-  const EventRaw(this.endDate, this.items);
+  const EventRaw(this.endDate, this.items, this.isEnd);
 
   String getTimeRemaining() {
     final now = DateTime.now();

@@ -54,18 +54,8 @@ class EventTabViewModel extends StateNotifier<EventTabState> {
 
     if (difference.isNegative) {
       _timer.cancel();
-      // 이벤트 종료 메시지 표시
-    } else {
-      final days = difference.inDays;
-      final hours = (difference.inHours - days * 24).toInt();
-      final minutes = (difference.inMinutes - days * 24 * 60 - hours * 60).toInt();
-      final seconds = (difference.inSeconds - days * 24 * 60 * 60 - hours * 60 * 60 - minutes * 60).toInt();
-
-      state = Success(event: EventRaw(
-        _endDate,
-        _items,
-      ));
     }
+    state = Success(event: EventRaw(_endDate, _items, difference.isNegative));
   }
 
   @override
