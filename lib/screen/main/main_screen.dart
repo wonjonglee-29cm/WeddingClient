@@ -43,15 +43,19 @@ class MainScreen extends HookConsumerWidget {
     useEffect(() {
       Future.microtask(() {
         if (!state.isWriteGreeting) {
-          showDialog(
+          showModalBottomSheet(
             context: context,
-            barrierDismissible: false,
+            isScrollControlled: true,
+            useRootNavigator: true,
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height,
+            ),
             builder: (context) => GreetingScreen(),
           );
         }
       });
       return null;
-    }, []);
+    }, [state.isWriteGreeting]);
 
     useEffect(() {
       if (initialTab != null) {

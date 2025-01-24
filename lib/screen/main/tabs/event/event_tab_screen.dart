@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wedding/data/raw/event_raw.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
+import 'package:wedding/screen/greeting/greeting_screen.dart';
 import 'package:wedding/screen/main/tabs/event/event_tab_viewmodel.dart';
 import 'package:wedding/screen/picture/picture_screen.dart';
 
@@ -42,7 +43,15 @@ class _EventTabScreen extends ConsumerState<EventTabScreen> {
                       onTap: () {
                         switch (item.type) {
                           case 'greeting':
-                            Navigator.of(context, rootNavigator: true).pushNamed('/greeting');
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              useRootNavigator: true,
+                              constraints: BoxConstraints(
+                                maxHeight: MediaQuery.of(context).size.height,
+                              ),
+                              builder: (context) => const GreetingScreen(),
+                            );
                           case 'quiz':
                             Navigator.of(context, rootNavigator: false).pushNamed('/quiz');
                           case 'picture':

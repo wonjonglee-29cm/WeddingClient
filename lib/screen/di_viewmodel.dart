@@ -43,7 +43,7 @@ final quizViewModelProvider = StateNotifierProvider<QuizViewModel, QuizState>((r
   return QuizViewModel(repository);
 });
 
-final greetingViewModelProvider = StateNotifierProvider<GreetingViewModel, AsyncValue>((ref) {
+final greetingViewModelProvider = StateNotifierProvider.autoDispose<GreetingViewModel, AsyncValue>((ref) {
   final repository = ref.watch(greetingRepositoryProvider);
   return GreetingViewModel(repository);
 });

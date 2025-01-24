@@ -54,11 +54,14 @@ class WeddingTextField extends StatelessWidget {
               Positioned(
                 right: 16,
                 bottom: 16,
-                child: Text(
-                  '${controller?.text.length ?? 0}/$maxLength',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
+                child: ValueListenableBuilder(
+                  valueListenable: controller!,
+                  builder: (context, value, child) => Text(
+                    '${value.text.length}/$maxLength',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ),

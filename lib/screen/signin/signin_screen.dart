@@ -26,6 +26,17 @@ class _SignScreenState extends ConsumerState<SignInScreen> {
     super.dispose();
   }
 
+  InputDecoration weddingTextFieldDecoration({required String labelText}) => InputDecoration(
+    labelText: labelText,
+    border: const OutlineInputBorder(),
+    focusedBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.black87),
+    ),
+    enabledBorder: const OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(signInViewModelProvider);
@@ -57,23 +68,17 @@ class _SignScreenState extends ConsumerState<SignInScreen> {
             children: [
               WeddingTextField(
                 controller: _idController,
-                decoration: const InputDecoration(
-                  labelText: '이름을 입력해주세요.',
-                  border: OutlineInputBorder(),
-                ),
+                decoration: weddingTextFieldDecoration(labelText: '이름을 입력해주세요.'),
                 maxLength: 6,
                 validator: (value) {
                   if (value?.isEmpty ?? true) return '이름을 입력해주세요.';
                   return null;
                 },
-              ).animate().fadeIn().slideX(),
+              ).animate().fadeIn().slideY(begin: 1, end: 0),
               const SizedBox(height: 24),
               WeddingTextField(
                 controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: '전화번호 뒷자리를 입력해주세요 (4자리)',
-                  border: OutlineInputBorder(),
-                ),
+                decoration: weddingTextFieldDecoration(labelText: '전화번호 뒷자리를 입력해주세요 (4자리)'),
                 keyboardType: TextInputType.number,
                 maxLength: 4,
                 obscureText: true,
@@ -82,7 +87,7 @@ class _SignScreenState extends ConsumerState<SignInScreen> {
                   if (value?.length != 4) return '4자리의 숫자를 입력해야 합니다';
                   return null;
                 },
-              ).animate().fadeIn().slideX(delay: const Duration(milliseconds: 200)),
+              ).animate().fadeIn().slideY(begin: 1, end: 0, delay: const Duration(milliseconds: 200)),
               const SizedBox(height: 24),
               if (state.error != null)
                 Text(
@@ -99,7 +104,7 @@ class _SignScreenState extends ConsumerState<SignInScreen> {
                         }
                       },
                 child: state.isLoading ? const CircularProgressIndicator() : const Text('로그인'),
-              ).animate().fadeIn().slideX(delay: const Duration(milliseconds: 400)),
+              ).animate().fadeIn().slideY(begin: 1, end: 0, delay: const Duration(milliseconds: 400)),
             ],
           ),
         ),
