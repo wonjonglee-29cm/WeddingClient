@@ -7,6 +7,7 @@ import 'package:wedding/screen/main/tabs/home/home_tab_viewmodel.dart';
 import 'package:wedding/screen/quiz/quiz_viewmodel.dart';
 import 'package:wedding/screen/signin/signin_viewmodel.dart';
 
+import 'greeting/greeting_viewmodel.dart';
 import 'userinfo/user_info_viewmodel.dart';
 
 final introViewModelProvider = StateNotifierProvider<IntroViewModel, IntroState>((ref) {
@@ -23,7 +24,8 @@ final userInfoViewModelProvider = StateNotifierProvider<UserInfoViewModel, UserI
 });
 
 final mainViewModelProvider = StateNotifierProvider<MainViewModel, MainState>((ref) {
-  return MainViewModel();
+  final repository = ref.watch(greetingRepositoryProvider);
+  return MainViewModel(repository);
 });
 
 final homeTabViewModelProvider = StateNotifierProvider<HomeTabViewModel, HomeTabState>((ref) {
@@ -39,4 +41,9 @@ final eventTabViewModelProvider = StateNotifierProvider<EventTabViewModel, Event
 final quizViewModelProvider = StateNotifierProvider<QuizViewModel, QuizState>((ref) {
   final repository = ref.watch(quizRepositoryProvider);
   return QuizViewModel(repository);
+});
+
+final greetingViewModelProvider = StateNotifierProvider<GreetingViewModel, AsyncValue>((ref) {
+  final repository = ref.watch(greetingRepositoryProvider);
+  return GreetingViewModel(repository);
 });

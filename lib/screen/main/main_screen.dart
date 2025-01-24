@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
+import 'package:wedding/screen/greeting/greeting_screen.dart';
 import 'package:wedding/screen/main/tabs/event/event_tab_screen.dart';
 import 'package:wedding/screen/main/tabs/home/home_tab_screen.dart';
 import 'package:wedding/screen/main/tabs/my/my_tab_screen.dart';
 import 'package:wedding/screen/picture/picture_screen.dart';
 import 'package:wedding/screen/quiz/quiz_screen.dart';
 
-class MainScreen extends ConsumerWidget {
+class MainScreen extends HookConsumerWidget {
   final int? initialTab;
 
   const MainScreen({this.initialTab, super.key});
@@ -36,13 +38,29 @@ class MainScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (initialTab != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(mainViewModelProvider.notifier).updateIndex(initialTab!);
-      });
-    }
+    final state = ref.watch(mainViewModelProvider);
 
-    final currentIndex = ref.watch(mainViewModelProvider).currentIndex;
+    useEffect(() {
+      Future.microtask(() {
+        if (!state.isWriteGreeting) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => GreetingScreen(),
+          );
+        }
+      });
+      return null;
+    }, []);
+
+    useEffect(() {
+      if (initialTab != null) {
+        ref.read(mainViewModelProvider.notifier).updateIndex(initialTab!);
+      }
+      return null;
+    }, []);
+
+    final currentIndex = state.currentIndex;
 
     return Scaffold(
       body: SafeArea(
