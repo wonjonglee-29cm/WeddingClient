@@ -7,12 +7,12 @@ sealed class HomeRaw {
 }
 
 class BannerRaw extends HomeRaw {
-  final String imageUrl;
+  final List<String> imageUrls;
   final String title;
 
   const BannerRaw({
     required super.index,
-    required this.imageUrl,
+    required this.imageUrls,
     required this.title,
   });
 }

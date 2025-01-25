@@ -43,15 +43,12 @@ class WeddingApp extends StatelessWidget {
     return MaterialApp(
       title: 'Wedding Invitation',
       initialRoute: '/',
-      routes: {
-        '/': (context) => const IntroScreen(),
-        '/home': (context) => const MainScreen(),
-        '/event': (context) => const MainScreen(initialTab: 1),
-        '/picture': (context) => const PictureScreen()
-      },
+      routes: {'/': (context) => const IntroScreen(), '/home': (context) => const MainScreen(), '/event': (context) => const MainScreen(initialTab: 1), '/picture': (context) => const PictureScreen()},
       theme: ThemeData(
-        primaryColor: Colors.white70,
-        primarySwatch: Colors.blueGrey,
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.blueGrey,
+          brightness: Brightness.light,
+        ),
         fontFamily: 'NotoSans',
       ),
     );

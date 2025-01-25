@@ -7,7 +7,7 @@ import 'package:wedding/data/raw/user_info_raw.dart';
 import 'package:wedding/data/remote/auth_interceptor.dart';
 
 class Api {
-  static const String baseUrl = 'http://localhost:8080';
+  static const String baseUrl = 'https://api.leewonjong.com';
 
   static Future<Dio> getDio() async {
     final prefs = await SharedPreferences.getInstance();

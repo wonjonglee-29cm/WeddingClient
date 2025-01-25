@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,9 +20,21 @@ class HomeTabScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
+  late final PageController pageController;
+
   @override
   void initState() {
     super.initState();
+    pageController = PageController(
+        viewportFraction: 0.85,
+        initialPage: 0
+    );
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -33,12 +47,12 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: state.items
                     .map((item) => switch (item) {
-                          BannerRaw(:final title, :final imageUrl) => bannerWidget(imageUrl, title),
+                          BannerRaw(:final title, :final imageUrls) => bannerWidget(imageUrls, title),
                           DateRaw(:final time, :final title) => titleWidget(
                               title,
                               descriptionWidget(time),
@@ -91,43 +105,78 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
     };
   }
 
-  Widget loading() => Scaffold(
-        body: Builder(
-            builder: (context) => const Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(100),
-                      child: Text('로딩중입니다...'),
-                    )
-                  ],
-                )),
-      );
+  Widget loading() => Scaffold(backgroundColor: Colors.white, body: Builder(builder: (context) => const Center(child: CircularProgressIndicator())));
 
   Widget titleWidget(String title, Widget child) {
     return SizedBox(
       width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: titleStyle),
-          defaultGap,
-          child,
-          itemsGap,
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: titleStyle),
+            defaultGap,
+            child,
+            itemsGap,
+          ],
+        ),
       ),
     );
   }
 
-  Widget bannerWidget(String imageUrl, String title) {
+  Widget bannerWidget(List<String> imageUrls, String title) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Image.network(
-            imageUrl,
-            fit: BoxFit.fitWidth,
-            alignment: Alignment.center,
+        AspectRatio(
+          aspectRatio: 4 / 5,
+          child: PageView.builder(
+            scrollDirection: Axis.horizontal,
+            controller: pageController,
+            pageSnapping: true,
+            allowImplicitScrolling: true,
+            itemCount: imageUrls.length,
+            itemBuilder: (context, index) {
+              return AnimatedBuilder(
+                animation: pageController,
+                builder: (context, child) {
+                  double scale = index == 0 ? 1.0 : 0.9;  // 초기 상태
+                  if (pageController.position.hasContentDimensions) {
+                    final value = pageController.page! - index;
+                    scale = (1 - (value.abs() * 0.1)).clamp(0.9, 1.0);
+                  }
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 0),
+                    child: Transform.scale(
+                      scale: scale,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: CachedNetworkImage(
+                          imageUrl: imageUrls[index],
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container(
+                            color: Colors.grey[200],
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            color: Colors.grey[200],
+                            child: const Icon(Icons.error_outline_rounded),
+                          ),
+                          cacheManager: CacheManager(
+                            Config(
+                              'imageCache',
+                              stalePeriod: const Duration(days: 30),
+                              maxNrOfCacheObjects: 100,
+                            ),
+                          ),
+                          useOldImageOnUrlChange: true,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
           ),
         ),
         defaultGap,
@@ -205,6 +254,7 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
             ),
           ),
         },
+        liteModeEnabled: true,
       );
     } else {
       return NaverMap(

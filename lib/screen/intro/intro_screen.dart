@@ -74,7 +74,7 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
       body: Container(
         color: Colors.white,
         child: Center(
-          child: Image.asset('../assets/images/splash.png'),
+          child: Image.asset('assets/images/splash.png'),
         ),
       ),
     );
