@@ -1,5 +1,3 @@
-
-
 sealed class HomeRaw {
   final int index;
 
@@ -15,6 +13,18 @@ class BannerRaw extends HomeRaw {
     required this.imageUrls,
     required this.title,
   });
+}
+
+class GateRaw extends HomeRaw {
+  final String text;
+  final String? imageType;
+  final String link;
+
+  GateRaw(
+      {required this.text,
+      required this.imageType,
+      required this.link,
+      required super.index});
 }
 
 class DateRaw extends HomeRaw {

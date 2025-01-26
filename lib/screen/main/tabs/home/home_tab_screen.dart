@@ -7,6 +7,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wedding/data/raw/home_raw.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
@@ -25,10 +26,7 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
   @override
   void initState() {
     super.initState();
-    pageController = PageController(
-        viewportFraction: 0.85,
-        initialPage: 0
-    );
+    pageController = PageController(viewportFraction: 0.85, initialPage: 0);
   }
 
   @override
@@ -43,69 +41,93 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
 
     return switch (state) {
       Loading() => loading(),
-      Success() => Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: state.items
-                    .map((item) => switch (item) {
-                          BannerRaw(:final title, :final imageUrls) => bannerWidget(imageUrls, title),
-                          DateRaw(:final time, :final title) => titleWidget(
-                              title,
-                              descriptionWidget(time),
-                            ),
-                          DressCodeRaw(:final title, :final colors) => titleWidget(title, colorWidget(colors)),
-                          MoneyRaw(:final title, :final couples) => titleWidget(
-                              title,
-                              Column(crossAxisAlignment: CrossAxisAlignment.start, children: couples.map((couple) => budgetWidget(couple)).toList()),
-                            ),
-                          ParkingRaw(:final title) => titleWidget(
-                              title,
-                              ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    height: 300,
-                                    child: mapWidget(item),
-                                  )),
-                            ),
-                          PlaceRaw(:final address, :final hall, :final title) => titleWidget(
-                              title,
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(hall, style: boldDescriptionStyle),
-                                        const SizedBox(width: 8),
-                                        Text(address, style: descriptionStyle),
-                                      ],
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.copy, size: 20),
-                                    onPressed: () {
-                                      copyClipboard(context, address, '주소가 복사되었습니다');
-                                    },
-                                  ),
-                                ],
+      Success() =>
+          Scaffold(
+            backgroundColor: Colors.white,
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: state.items
+                      .map((item) =>
+                  switch (item) {
+                    BannerRaw(:final title, :final imageUrls) =>
+                        bannerWidget(imageUrls, title),
+                    GateRaw(:final text, :final imageType, :final link) =>
+                        gateWidget(text, imageType, link),
+                    DateRaw(:final time, :final title) =>
+                        titleWidget(
+                          title,
+                          descriptionWidget(time),
+                        ),
+                    DressCodeRaw(:final title, :final colors) =>
+                        titleWidget(title, colorWidget(colors)),
+                    MoneyRaw(:final title, :final couples) =>
+                        titleWidget(
+                          title,
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: couples
+                                  .map((couple) => budgetWidget(couple))
+                                  .toList()),
+                        ),
+                    ParkingRaw(:final title) =>
+                        titleWidget(
+                          title,
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 300,
+                                child: mapWidget(item),
                               )),
-                        })
-                    .toList(),
+                        ),
+                    PlaceRaw(:final address, :final hall, :final title) =>
+                        titleWidget(
+                            title,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: [
+                                      Text(hall,
+                                          style: boldDescriptionStyle),
+                                      const SizedBox(width: 8),
+                                      Text(address,
+                                          style: descriptionStyle),
+                                    ],
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.copy, size: 20),
+                                  onPressed: () {
+                                    copyClipboard(
+                                        context, address, '주소가 복사되었습니다');
+                                  },
+                                ),
+                              ],
+                            )),
+                  })
+                      .toList(),
+                ),
               ),
             ),
           ),
-        ),
     };
   }
 
-  Widget loading() => Scaffold(backgroundColor: Colors.white, body: Builder(builder: (context) => const Center(child: CircularProgressIndicator())));
+  Widget loading() =>
+      Scaffold(
+          backgroundColor: Colors.white,
+          body: Builder(
+              builder: (context) =>
+              const Center(child: CircularProgressIndicator())));
 
   Widget titleWidget(String title, Widget child) {
     return SizedBox(
@@ -126,61 +148,133 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
   }
 
   Widget bannerWidget(List<String> imageUrls, String title) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AspectRatio(
-          aspectRatio: 4 / 5,
-          child: PageView.builder(
-            scrollDirection: Axis.horizontal,
-            controller: pageController,
-            pageSnapping: true,
-            allowImplicitScrolling: true,
-            itemCount: imageUrls.length,
-            itemBuilder: (context, index) {
-              return AnimatedBuilder(
-                animation: pageController,
-                builder: (context, child) {
-                  double scale = index == 0 ? 1.0 : 0.9;  // 초기 상태
-                  if (pageController.position.hasContentDimensions) {
-                    final value = pageController.page! - index;
-                    scale = (1 - (value.abs() * 0.1)).clamp(0.9, 1.0);
-                  }
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 0),
-                    child: Transform.scale(
-                      scale: scale,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: CachedNetworkImage(
-                          imageUrl: imageUrls[index],
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            color: Colors.grey[200],
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            color: Colors.grey[200],
-                            child: const Icon(Icons.error_outline_rounded),
-                          ),
-                          cacheManager: CacheManager(
-                            Config(
-                              'imageCache',
-                              stalePeriod: const Duration(days: 30),
-                              maxNrOfCacheObjects: 100,
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.grey[500]!, Colors.white],
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 20),
+          AspectRatio(
+            aspectRatio: 4 / 5,
+            child: PageView.builder(
+              scrollDirection: Axis.horizontal,
+              controller: pageController,
+              pageSnapping: true,
+              allowImplicitScrolling: true,
+              itemCount: imageUrls.length,
+              itemBuilder: (context, index) {
+                return AnimatedBuilder(
+                  animation: pageController,
+                  builder: (context, child) {
+                    double scale = index == 0 ? 1.0 : 0.9; // 초기 상태
+                    if (pageController.position.hasContentDimensions) {
+                      final value = pageController.page! - index;
+                      scale = (1 - (value.abs() * 0.1)).clamp(0.9, 1.0);
+                    }
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 0),
+                      child: Transform.scale(
+                        scale: scale,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: CachedNetworkImage(
+                            imageUrl: imageUrls[index],
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                Container(
+                                  color: Colors.grey[200],
+                                ),
+                            errorWidget: (context, url, error) =>
+                                Container(
+                                  color: Colors.grey[200],
+                                  child: const Icon(
+                                      Icons.error_outline_rounded),
+                                ),
+                            cacheManager: CacheManager(
+                              Config(
+                                'imageCache',
+                                stalePeriod: const Duration(days: 30),
+                                maxNrOfCacheObjects: 100,
+                              ),
                             ),
+                            useOldImageOnUrlChange: true,
                           ),
-                          useOldImageOnUrlChange: true,
                         ),
                       ),
-                    ),
-                  );
-                },
-              );
-            },
+                    );
+                  },
+                );
+              },
+            ),
           ),
+          defaultGap,
+          Text(title, style: largeBoldTitleStyle),
+          itemsGap,
+        ],
+      ),
+    );
+  }
+
+  Widget gateWidget(String text, String? imageType, String link) {
+    return Column(
+      children: [
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: InkWell(
+                onTap: () async {
+                  final url = Uri.parse(link);
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                  }
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1,
+                    ),
+                  ),
+                  child: Padding(
+                    padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Icon(
+                            imageType == 'video' ? Icons.videocam_outlined :
+                            imageType == 'image' ? Icons.image :
+                            Icons.videocam_outlined,
+                            size: 40,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                text,
+                                style: titleStyle,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.arrow_forward_ios, size: 16),
+                      ],
+                    ),
+                  ),
+                )
+            )
         ),
-        defaultGap,
-        Text(title, style: largeBoldTitleStyle),
         itemsGap,
       ],
     );
@@ -191,15 +285,17 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
       spacing: 8,
       runSpacing: 8,
       children: colors
-          .map((color) => Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Color(int.parse(color.substring(1), radix: 16) + 0xFF000000),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.shade300),
-                ),
-              ))
+          .map((color) =>
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Color(
+                  int.parse(color.substring(1), radix: 16) + 0xFF000000),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+          ))
           .toList(),
     );
   }
@@ -281,7 +377,8 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
     }
   }
 
-  void copyClipboard(BuildContext context, String copyText, String snackBarText) {
+  void copyClipboard(BuildContext context, String copyText,
+      String snackBarText) {
     // 클립보드에 계좌번호 복사
     Clipboard.setData(ClipboardData(text: copyText));
 

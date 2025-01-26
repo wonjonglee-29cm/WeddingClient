@@ -9,7 +9,8 @@ class HomeRepository {
   HomeRepository(this._firestore);
 
   Future<List<HomeRaw>> getHomeItems() async {
-    final items = await _firestore.collection(COLLECTION_NAME).doc(DOC_NAME).get();
+    final items =
+        await _firestore.collection(COLLECTION_NAME).doc(DOC_NAME).get();
 
     return convertFirebaseData(items.data() ?? {});
   }
@@ -26,11 +27,29 @@ class HomeRepository {
           final dateTime = timestamp.toDate();
           items.add(DateRaw(
             index: dateData['index'] as int,
-            time: "${dateTime.year}년 ${dateTime.month}월 ${dateTime.day}일 ${dateTime.hour}시 ${dateTime.minute}분",
+            time:
+                "${dateTime.year}년 ${dateTime.month}월 ${dateTime.day}일 ${dateTime.hour}시 ${dateTime.minute}분",
             title: dateData['title'] as String,
           ));
         } catch (e) {
           print('Date conversion error: $e');
+        }
+      }
+      // Gate 변환
+      if (data['gate'] != null) {
+        try {
+          final gateData = data['gate'] as Map<String, dynamic>;
+          final imageType = gateData['imageType'] as String?;
+          final text = gateData['text'] as String;
+          final link = gateData['link'] as String;
+          items.add(GateRaw(
+              index: gateData['index'] as int,
+              imageType: imageType,
+              text: text,
+          link: link)
+          );
+        } catch (e) {
+          print('Gate conversion error: $e');
         }
       }
 
@@ -99,7 +118,8 @@ class HomeRepository {
           // 신랑 부모님
           if (moneyData['groomParent'] != null) {
             try {
-              final groomParent = moneyData['groomParent'] as Map<String, dynamic>;
+              final groomParent =
+                  moneyData['groomParent'] as Map<String, dynamic>;
               couples.add(MarriedCoupleRaw(
                 account: groomParent['account'] as String,
                 index: groomParent['index'] as int,
@@ -113,7 +133,8 @@ class HomeRepository {
           // 신부 부모님
           if (moneyData['brideParent'] != null) {
             try {
-              final brideParent = moneyData['brideParent'] as Map<String, dynamic>;
+              final brideParent =
+                  moneyData['brideParent'] as Map<String, dynamic>;
               couples.add(MarriedCoupleRaw(
                 account: brideParent['account'] as String,
                 index: brideParent['index'] as int,
@@ -174,7 +195,6 @@ class HomeRepository {
       if (items.isNotEmpty) {
         items.sort((a, b) => a.index.compareTo(b.index));
       }
-
     } catch (e) {
       print('Data conversion error: $e');
     }
