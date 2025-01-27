@@ -57,7 +57,7 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
       case RequiredUserInfo():
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const UserInfoScreen()),
+          MaterialPageRoute(builder: (context) => const UserInfoScreen(screenType: UserInfoScreenType.init)),
         );
     }
   }

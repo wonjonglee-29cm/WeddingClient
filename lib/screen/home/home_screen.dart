@@ -41,93 +41,74 @@ class _HomeScreen extends ConsumerState<HomeScreen> {
 
     return switch (state) {
       Loading() => loading(),
-      Success() =>
-          Scaffold(
-            backgroundColor: Colors.white,
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: state.items
-                      .map((item) =>
-                  switch (item) {
-                    BannerRaw(:final title, :final imageUrls) =>
-                        bannerWidget(imageUrls, title),
-                    GateRaw(:final text, :final imageType, :final link) =>
-                        gateWidget(text, imageType, link),
-                    DateRaw(:final time, :final title) =>
-                        titleWidget(
-                          title,
-                          descriptionWidget(time),
-                        ),
-                    DressCodeRaw(:final title, :final colors) =>
-                        titleWidget(title, colorWidget(colors)),
-                    MoneyRaw(:final title, :final couples) =>
-                        titleWidget(
-                          title,
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: couples
-                                  .map((couple) => budgetWidget(couple))
-                                  .toList()),
-                        ),
-                    ParkingRaw(:final title) =>
-                        titleWidget(
-                          title,
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: SizedBox(
-                                width: double.infinity,
-                                height: 300,
-                                child: mapWidget(item),
-                              )),
-                        ),
-                    PlaceRaw(:final address, :final hall, :final title) =>
-                        titleWidget(
-                            title,
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                    children: [
-                                      Text(hall,
-                                          style: boldDescriptionStyle),
-                                      const SizedBox(width: 8),
-                                      Text(address,
-                                          style: descriptionStyle),
-                                    ],
+      Success() => Scaffold(
+          backgroundColor: Colors.white,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(
+                  state.items.length * 2 - 1,
+                  (index) => index.isOdd
+                      ? const SizedBox(height: 20)
+                      : switch (state.items[index ~/ 2]) {
+                          BannerRaw(:final title, :final imageUrls) => bannerWidget(imageUrls, title),
+                          GateRaw(:final text, :final imageType, :final link) => gateWidget(text, imageType, link),
+                          DateRaw(:final time, :final title) => titleWidget(title, descriptionWidget(time),),
+                          DressCodeRaw(:final title, :final colors) => titleWidget(title, colorWidget(colors)),
+                          MoneyRaw(:final title, :final couples) => titleWidget(title,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: couples.map((couple) => budgetWidget(couple)).toList(),
+                              ),
+                            ),
+                          ParkingRaw(:final title) =>
+                              titleWidget(
+                                title, const Row()
+                                // ClipRRect(
+                                //     borderRadius: BorderRadius.circular(8.0),
+                                //     child: SizedBox(
+                                //       width: double.infinity,
+                                //       height: 300,
+                                //       child: mapWidget(item),
+                                //     )),
+                              ),
+                          PlaceRaw(:final address, :final hall, :final title) => titleWidget(
+                              title,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(hall, style: boldDescriptionStyle),
+                                        const SizedBox(width: 8),
+                                        Text(address, style: descriptionStyle),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.copy, size: 20),
-                                  onPressed: () {
-                                    copyClipboard(
-                                        context, address, '주소가 복사되었습니다');
-                                  },
-                                ),
-                              ],
-                            )),
-                  })
-                      .toList(),
+                                  IconButton(
+                                    icon: const Icon(Icons.copy, size: 20),
+                                    onPressed: () {
+                                      copyClipboard(context, address, '주소가 복사되었습니다');
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                        },
                 ),
               ),
             ),
           ),
+        ),
     };
   }
 
-  Widget loading() =>
-      Scaffold(
-          backgroundColor: Colors.white,
-          body: Builder(
-              builder: (context) =>
-              const Center(child: CircularProgressIndicator())));
+  Widget loading() => Scaffold(backgroundColor: Colors.white, body: Builder(builder: (context) => const Center(child: CircularProgressIndicator())));
 
   Widget titleWidget(String title, Widget child) {
     return SizedBox(
@@ -160,62 +141,101 @@ class _HomeScreen extends ConsumerState<HomeScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 20),
-          AspectRatio(
-            aspectRatio: 4 / 5,
-            child: PageView.builder(
-              scrollDirection: Axis.horizontal,
-              controller: pageController,
-              pageSnapping: true,
-              allowImplicitScrolling: true,
-              itemCount: imageUrls.length,
-              itemBuilder: (context, index) {
-                return AnimatedBuilder(
-                  animation: pageController,
-                  builder: (context, child) {
-                    double scale = index == 0 ? 1.0 : 0.9; // 초기 상태
-                    if (pageController.position.hasContentDimensions) {
-                      final value = pageController.page! - index;
-                      scale = (1 - (value.abs() * 0.1)).clamp(0.9, 1.0);
-                    }
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 0),
-                      child: Transform.scale(
-                        scale: scale,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: CachedNetworkImage(
-                            imageUrl: imageUrls[index],
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) =>
-                                Container(
-                                  color: Colors.grey[200],
+          Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              AspectRatio(
+                aspectRatio: 4 / 5,
+                child: PageView.builder(
+                  scrollDirection: Axis.horizontal,
+                  controller: pageController,
+                  pageSnapping: true,
+                  allowImplicitScrolling: true,
+                  itemCount: imageUrls.length + 1,
+                  // 추가 버튼을 위해 +1
+                  itemBuilder: (context, index) {
+                    // 마지막 페이지는 더 보기 버튼
+                    if (index == imageUrls.length) {
+                      return GestureDetector(
+                        onTap: () {
+                          // 더 보기 기능 구현
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          child: const Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add_circle_outline, color: Colors.white, size: 50),
+                                SizedBox(height: 10),
+                                Text(
+                                  '추억 사진 더 보기',
+                                  style: whiteTitleStyle,
                                 ),
-                            errorWidget: (context, url, error) =>
-                                Container(
-                                  color: Colors.grey[200],
-                                  child: const Icon(
-                                      Icons.error_outline_rounded),
-                                ),
-                            cacheManager: CacheManager(
-                              Config(
-                                'imageCache',
-                                stalePeriod: const Duration(days: 30),
-                                maxNrOfCacheObjects: 100,
-                              ),
+                              ],
                             ),
-                            useOldImageOnUrlChange: true,
                           ),
                         ),
-                      ),
+                      );
+                    }
+
+                    return AnimatedBuilder(
+                      animation: pageController,
+                      builder: (context, child) {
+                        double scale = index == 0 ? 1.0 : 0.9; // 초기 상태
+                        if (pageController.position.hasContentDimensions) {
+                          final value = pageController.page! - index;
+                          scale = (1 - (value.abs() * 0.1)).clamp(0.9, 1.0);
+                        }
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 0),
+                          child: Transform.scale(
+                            scale: scale,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: CachedNetworkImage(
+                                imageUrl: imageUrls[index],
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => Container(
+                                  color: Colors.grey[200],
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: Colors.grey[200],
+                                  child: const Icon(Icons.error_outline_rounded),
+                                ),
+                                cacheManager: CacheManager(
+                                  Config(
+                                    'imageCache',
+                                    stalePeriod: const Duration(days: 30),
+                                    maxNrOfCacheObjects: 100,
+                                  ),
+                                ),
+                                useOldImageOnUrlChange: true,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     );
                   },
-                );
-              },
-            ),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                child: Column(
+                  children: [
+                    defaultGap,
+                    Text(title, style: whiteLargeBoldTitleStyle),
+                    itemsGap,
+                  ],
+                ),
+              ),
+            ],
           ),
-          defaultGap,
-          Text(title, style: largeBoldTitleStyle),
-          itemsGap,
         ],
       ),
     );
@@ -243,16 +263,17 @@ class _HomeScreen extends ConsumerState<HomeScreen> {
                     ),
                   ),
                   child: Padding(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                     child: Row(
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Icon(
-                            imageType == 'video' ? Icons.videocam_outlined :
-                            imageType == 'image' ? Icons.image :
-                            Icons.videocam_outlined,
+                            imageType == 'video'
+                                ? Icons.videocam_outlined
+                                : imageType == 'image'
+                                    ? Icons.image
+                                    : Icons.videocam_outlined,
                             size: 40,
                           ),
                         ),
@@ -272,9 +293,7 @@ class _HomeScreen extends ConsumerState<HomeScreen> {
                       ],
                     ),
                   ),
-                )
-            )
-        ),
+                ))),
         itemsGap,
       ],
     );
@@ -285,17 +304,15 @@ class _HomeScreen extends ConsumerState<HomeScreen> {
       spacing: 8,
       runSpacing: 8,
       children: colors
-          .map((color) =>
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Color(
-                  int.parse(color.substring(1), radix: 16) + 0xFF000000),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.shade300),
-            ),
-          ))
+          .map((color) => Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Color(int.parse(color.substring(1), radix: 16) + 0xFF000000),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+              ))
           .toList(),
     );
   }
@@ -377,8 +394,7 @@ class _HomeScreen extends ConsumerState<HomeScreen> {
     }
   }
 
-  void copyClipboard(BuildContext context, String copyText,
-      String snackBarText) {
+  void copyClipboard(BuildContext context, String copyText, String snackBarText) {
     // 클립보드에 계좌번호 복사
     Clipboard.setData(ClipboardData(text: copyText));
 

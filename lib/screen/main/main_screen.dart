@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wedding/design/anim/ds_slide_route.dart';
 import 'package:wedding/design/component/ds_appbar.dart';
+import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
 import 'package:wedding/screen/greeting/greeting_screen.dart';
 import 'package:wedding/screen/home/home_screen.dart';
-import 'package:wedding/screen/main/tabs/my/my_tab_screen.dart';
+import 'package:wedding/screen/invite/invite_screen.dart';
+import 'package:wedding/screen/my/my_tab_screen.dart';
 import 'package:wedding/screen/quiz/quiz_screen.dart';
 
 class MainScreen extends HookConsumerWidget {
@@ -16,6 +19,7 @@ class MainScreen extends HookConsumerWidget {
 
   static final List<Widget> _screens = [
     const HomeScreen(),
+    const InviteScreen(),
     const QuizScreen(),
     const MyTabScreen(),
   ];
@@ -27,18 +31,7 @@ class MainScreen extends HookConsumerWidget {
     useEffect(() {
       Future.microtask(() {
         if (!state.isWriteGreeting) {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            useRootNavigator: true,
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery
-                  .of(context)
-                  .size
-                  .height,
-            ),
-            builder: (context) => const GreetingScreen(),
-          );
+          Navigator.of(context).push(SlideUpRoute(page: const GreetingScreen()));
         }
       });
       return null;
@@ -53,12 +46,11 @@ class MainScreen extends HookConsumerWidget {
 
     final currentIndex = state.currentIndex;
 
-    return  WillPopScope(
+    return WillPopScope(
       onWillPop: () async {
         final now = DateTime.now();
 
-        if (_lastPressed == null ||
-            now.difference(_lastPressed!) > const Duration(seconds: 2)) {
+        if (_lastPressed == null || now.difference(_lastPressed!) > const Duration(seconds: 2)) {
           _lastPressed = now;
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -79,27 +71,30 @@ class MainScreen extends HookConsumerWidget {
         ),
         body: SafeArea(
             child: IndexedStack(
-              index: currentIndex,
-              children: _screens,
-            )),
+          index: currentIndex,
+          children: _screens,
+        )),
         bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           selectedIconTheme: const IconThemeData(
             size: 24,
           ),
           unselectedIconTheme: const IconThemeData(
-            size: 22,
+            size: 20,
           ),
           selectedFontSize: 14,
           unselectedFontSize: 12,
-          selectedItemColor: Colors.blueGrey,
+          selectedItemColor: primaryColor,
+          unselectedItemColor: Colors.black,
           backgroundColor: Colors.white,
           elevation: 10,
           currentIndex: currentIndex,
           onTap: (index) => ref.read(mainViewModelProvider.notifier).updateIndex(index),
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home_outlined, size: 24), label: '홈'),
-            BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/images/quiz.png'), size: 24), label: 'Quiz'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_outline, size: 24), label: '내 정보'),
+            BottomNavigationBarItem(icon: Icon(Icons.home_outlined, size: 20), label: '홈'),
+            BottomNavigationBarItem(icon: Icon(Icons.mail_outline, size: 20), label: '초대장'),
+            BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/images/quiz.png'), size: 20), label: 'Quiz'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_outline, size: 20), label: '내 정보'),
           ],
         ),
       ),

@@ -1,11 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wedding/data/raw/quiz_raw.dart';
+import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
 import 'package:wedding/screen/quiz/quiz_viewmodel.dart';
-
-import '../../design/ds_foundation.dart';
+import 'dart:html' as html;
 
 class QuizScreen extends ConsumerStatefulWidget {
   const QuizScreen({super.key});
@@ -82,17 +83,34 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
               Success(
                 items: final items,
                 currentPage: final currentPage,
-              ) => _buildQuizContent(items, currentPage),
-              Done() => InAppWebView(
-                  initialUrlRequest: URLRequest(
-                    url: WebUri('https://captainwonjong.notion.site/LeeWonJong-Android-Dev-a6e27f81420f4b0bad7b0271a3d5366f'),
-                  ),
-                ),
+              ) =>
+                _buildQuizContent(items, currentPage),
+              Done() => buildWebView(),
             }),
           );
         },
       ),
     );
+  }
+
+  Widget buildWebView() {
+    const uri = 'https://captainwonjong.notion.site/LeeWonJong-Android-Dev-a6e27f81420f4b0bad7b0271a3d5366f';
+    if (kIsWeb) {
+      return Center(
+        child: ElevatedButton(
+          onPressed: () {
+            html.window.open(uri, '_blank');
+          },
+          child: const Text('퀴즈 확인하기'),
+        ),
+      );
+    } else {
+      return InAppWebView(
+        initialUrlRequest: URLRequest(
+          url: WebUri(uri),
+        ),
+      );
+    }
   }
 
   Widget _buildQuizContent(List<QuizRaw> items, int currentPage) {
