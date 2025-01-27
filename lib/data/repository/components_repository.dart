@@ -65,6 +65,8 @@ class ComponentsRepository {
           return ButtonRaw.fromJson(item);
         case 'account':
           return AccountRaw.fromJson(item);
+        case 'line':
+          return LineRaw.fromJson(item);
         default:
           return null;
       }

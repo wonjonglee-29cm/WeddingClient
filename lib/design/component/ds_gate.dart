@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wedding/design/ds_foundation.dart';
 
-Widget gateWidget(String text, String? imageType, String link) {
+Widget gateWidget(String text, String? imageType, String link, double? horizontalPadding) {
   return Column(
     children: [
       Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding ?? 20.0),
           child: InkWell(
               onTap: () async {
                 final url = Uri.parse(link);
@@ -54,7 +54,9 @@ Widget gateWidget(String text, String? imageType, String link) {
                     ],
                   ),
                 ),
-              ))),
+              )
+          )
+      ),
       itemsGap,
     ],
   );

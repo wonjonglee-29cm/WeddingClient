@@ -10,7 +10,7 @@ Widget titleWidget(String title, Widget child) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: titleStyle2),
-          defaultGap,
+          title2Gap,
           child,
           itemsGap,
         ],

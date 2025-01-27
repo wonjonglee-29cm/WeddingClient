@@ -30,48 +30,61 @@ Widget bannerWidget(PageController pageController, BannerRaw raw) {
                 pageSnapping: true,
                 allowImplicitScrolling: true,
                 itemCount: raw.imageUrls.length + 1,
-                // 추가 버튼을 위해 +1
                 itemBuilder: (context, index) {
-                  // 마지막 페이지는 더 보기 버튼
-                  if (index == raw.imageUrls.length) {
-                    return GestureDetector(
-                      onTap: () async {
-                        final url = Uri.parse(raw.moreLink);
-                        if (await canLaunchUrl(url)) {
-                          await launchUrl(url, mode: LaunchMode.externalApplication);
-                        }
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                          color: Colors.black.withOpacity(0.5),
-                        ),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.add_circle_outline, color: Colors.white, size: 50),
-                              const SizedBox(height: 10),
-                              Text(
-                                raw.moreText,
-                                style: whiteTitleStyle2,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-
                   return AnimatedBuilder(
                     animation: pageController,
                     builder: (context, child) {
-                      double scale = index == 0 ? 1.0 : 0.9; // 초기 상태
+                      final screenWidth = MediaQuery.of(context).size.width;
+                      const minScale = 0.95;
+                      const scaleOffset = 20.0;
+
+                      double scale = index == 0 ? 1.0 : minScale;
                       if (pageController.position.hasContentDimensions) {
                         final value = pageController.page! - index;
-                        scale = (1 - (value.abs() * 0.1)).clamp(0.9, 1.0);
+                        final pixelScale = scaleOffset * value.abs();
+                        scale = ((screenWidth - pixelScale) / screenWidth).clamp(minScale, 1.0);
                       }
+
+                      if (index == raw.imageUrls.length) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 0),
+                          child: Transform.scale(
+                            scale: scale,
+                            child: GestureDetector(
+                              onTap: () async {
+                                final url = Uri.parse(raw.moreLink);
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(url, mode: LaunchMode.externalApplication);
+                                }
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  color: Colors.black.withOpacity(0.5),
+                                ),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.add_circle_outline,
+                                        color: Colors.white,
+                                        size: 50,
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        raw.moreText,
+                                        style: whiteTitleStyle2,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
                       return Container(
                         margin: const EdgeInsets.symmetric(horizontal: 0),
                         child: Transform.scale(
@@ -109,7 +122,7 @@ Widget bannerWidget(PageController pageController, BannerRaw raw) {
               bottom: 0,
               child: Column(
                 children: [
-                  defaultGap,
+                  title2Gap,
                   Text(raw.title, style: whiteTitleStyle1),
                   itemsGap,
                 ],

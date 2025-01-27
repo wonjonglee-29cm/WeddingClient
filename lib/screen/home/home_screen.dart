@@ -11,8 +11,12 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const horizontalPadding = 20.0;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final itemWidth = screenWidth - (horizontalPadding * 2);  // 좌우
+    final fraction = itemWidth / screenWidth;
     final pageController = usePageController(
-      viewportFraction: 0.85,
+      viewportFraction: fraction,
       initialPage: 0,
     );
 
@@ -21,7 +25,7 @@ class HomeScreen extends HookConsumerWidget {
     return state.when(
       loading: () => loadingWidget(),
       error: (error, _) => errorWidget(onRetry: () => ref.read(homeViewModelProvider.notifier).loadItems()),
-      data: (items) => componentsContainerWidget(items, pageController: pageController),
+      data: (items) => componentsContainerWidget(items, pageController: pageController, horizontalPadding: horizontalPadding),
     );
   }
 }

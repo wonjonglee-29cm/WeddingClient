@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 SizedBox smallGap = const SizedBox(height: 4);
-SizedBox defaultGap = const SizedBox(height: 8);
+SizedBox title1Gap = const SizedBox(height: 20);
+SizedBox title2Gap = const SizedBox(height: 8);
 SizedBox itemsGap = const SizedBox(height: 24);
 
 const TextStyle appBarStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black);

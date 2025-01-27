@@ -49,6 +49,28 @@ class GateRaw extends ComponentRaw {
   }
 }
 
+class LineRaw extends ComponentRaw {
+  final String? color;
+  final double? paddingTop;
+  final double? paddingBottom;
+
+  LineRaw({
+    required super.type,
+    this.color,
+    this.paddingTop,
+    this.paddingBottom,
+  });
+
+  factory LineRaw.fromJson(Map<String, dynamic> json) {
+    return LineRaw(
+      type: json['type'],
+      color: json['color'],
+      paddingTop: json['paddingTop']?.toDouble(),
+      paddingBottom: json['paddingBottom']?.toDouble(),
+    );
+  }
+}
+
 class TextRaw extends ComponentRaw {
   final String align;
   final String title;

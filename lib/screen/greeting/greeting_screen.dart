@@ -48,9 +48,9 @@ class GreetingScreen extends HookConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          defaultGap,
+          title2Gap,
           const Text('축하인사를 작성해주세요', style: titleStyle2),
-          defaultGap,
+          title2Gap,
           Expanded(
               child: TextField(
             controller: controller,
