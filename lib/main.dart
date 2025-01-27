@@ -8,7 +8,6 @@ import 'package:wedding/data/di_preference.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/intro/intro_screen.dart';
 import 'package:wedding/screen/main/main_screen.dart';
-import 'package:wedding/screen/picture/picture_screen.dart';
 
 import 'firebase_options.dart';
 
@@ -54,7 +53,11 @@ class WeddingApp extends StatelessWidget {
     return MaterialApp(
       title: 'Wedding Invitation',
       initialRoute: '/',
-      routes: {'/': (context) => const IntroScreen(), '/home': (context) => const MainScreen(), '/event': (context) => const MainScreen(initialTab: 1), '/picture': (context) => const PictureScreen()},
+      routes: {
+        '/': (context) => const IntroScreen(),
+        '/home': (context) => const MainScreen(),
+        '/event': (context) => const MainScreen(initialTab: 1)
+      },
       theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: mainMaterialColor,

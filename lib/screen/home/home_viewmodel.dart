@@ -1,37 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wedding/data/raw/home_raw.dart';
-import 'package:wedding/data/repository/home_repository.dart';
+import 'package:wedding/data/raw/component_raw.dart';
+import 'package:wedding/data/repository/components_repository.dart';
 
-sealed class HomeTabState {
-  const HomeTabState();
-}
+class HomeViewModel extends StateNotifier<AsyncValue<List<ComponentRaw>>> {
+  final ComponentsRepository _repository;
 
-class Loading extends HomeTabState {
-  const Loading();
-}
-
-class Success extends HomeTabState {
-  final List<HomeRaw> items;
-
-  Success({required this.items});
-}
-
-class HomeViewModel extends StateNotifier<HomeTabState> {
-  final HomeRepository _repository;
-  HomeViewModel(this._repository) : super(const Loading()) {
+  HomeViewModel(this._repository) : super(const AsyncValue.loading()) {
     loadItems();
   }
 
   Future<void> loadItems() async {
-    state = const Loading();
     try {
-      // Firebase나 다른 데이터 소스에서 데이터를 가져오는 로직
-      final items = await _repository.getHomeItems();
-      state = Success(items: items);
-    } catch (e) {
-      // 에러 처리
-      debugPrint(e.toString());
+      state = await AsyncValue.guard(() => _repository.getHomeItems());
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      rethrow;
     }
   }
 }
