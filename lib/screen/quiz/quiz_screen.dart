@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wedding/data/raw/quiz_raw.dart';
-import 'package:wedding/screen/quiz/quiz_viewmodel.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
+import 'package:wedding/screen/quiz/quiz_viewmodel.dart';
 
 import '../../design/ds_foundation.dart';
 
@@ -15,6 +16,7 @@ class QuizScreen extends ConsumerStatefulWidget {
 
 class _QuizScreen extends ConsumerState<QuizScreen> {
   PageController? _pageController;
+  InAppWebViewController? webViewController;
   final Map<int, int> _selectedAnswers = {};
 
   @override
@@ -26,10 +28,17 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
     }
   }
 
+  Future<bool> _onWillPop() async {
+    if (await webViewController?.canGoBack() ?? false) {
+      await webViewController?.goBack();
+      return false;
+    }
+    return true;
+  }
+
   Future<void> _submitAnswer(int quizId, int selectedAnswer) async {
     try {
-      final isAllDone = await ref.read(quizViewModelProvider.notifier)
-          .postQuizAnswer(quizId, selectedAnswer);
+      final isAllDone = await ref.read(quizViewModelProvider.notifier).postQuizAnswer(quizId, selectedAnswer);
 
       if (isAllDone) {
         if (mounted) {
@@ -65,16 +74,22 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
       body: Consumer(
         builder: (context, ref, _) {
           final state = ref.watch(quizViewModelProvider);
-
-          return switch (state) {
-            Loading() => const Center(child: CircularProgressIndicator()),
-            Success(
-              items: final items,
-              currentPage: final currentPage,
-            ) =>
-              _buildQuizContent(items, currentPage),
-            Done() => const Center(child: Text('모든 퀴즈를 풀었습니다')),
-          };
+          return WillPopScope(
+            onWillPop: _onWillPop,
+            child: Scaffold(
+                body: switch (state) {
+              Loading() => const Center(child: CircularProgressIndicator()),
+              Success(
+                items: final items,
+                currentPage: final currentPage,
+              ) => _buildQuizContent(items, currentPage),
+              Done() => InAppWebView(
+                  initialUrlRequest: URLRequest(
+                    url: WebUri('https://captainwonjong.notion.site/LeeWonJong-Android-Dev-a6e27f81420f4b0bad7b0271a3d5366f'),
+                  ),
+                ),
+            }),
+          );
         },
       ),
     );
@@ -147,9 +162,7 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: _selectedAnswers.containsKey(items[currentPage].id)
-                    ? () => _submitAnswer(items[currentPage].id, _selectedAnswers[items[currentPage].id]!)
-                    : null,
+                onPressed: _selectedAnswers.containsKey(items[currentPage].id) ? () => _submitAnswer(items[currentPage].id, _selectedAnswers[items[currentPage].id]!) : null,
                 child: Text(currentPage == items.length - 1 ? '완료' : '다음'),
               ),
             ],

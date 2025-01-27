@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:wedding/design/component/ds_appbar.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
 
@@ -32,12 +33,7 @@ class GreetingScreen extends HookConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(backgroundColor: Colors.white, automaticallyImplyLeading: false, elevation: 1.0, title: const Text('Quiz', style: appBarStyle), actions: [
-        IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ]),
+      appBar: closeAppBar(context, '방명록'),
       body: state.when(
         data: (_) => _buildContent(context, ref, controller),
         loading: () => const Center(child: CircularProgressIndicator()),

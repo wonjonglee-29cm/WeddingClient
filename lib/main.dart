@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wedding/data/di_preference.dart';
+import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/intro/intro_screen.dart';
 import 'package:wedding/screen/main/main_screen.dart';
 import 'package:wedding/screen/picture/picture_screen.dart';
@@ -12,6 +14,15 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: tertiaryColor,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.dark,
+    ),
+  );
+
   final container = ProviderContainer();
   await container.read(sharedPreferencesProvider.future);
 
@@ -45,11 +56,11 @@ class WeddingApp extends StatelessWidget {
       initialRoute: '/',
       routes: {'/': (context) => const IntroScreen(), '/home': (context) => const MainScreen(), '/event': (context) => const MainScreen(initialTab: 1), '/picture': (context) => const PictureScreen()},
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.blueGrey,
-          brightness: Brightness.light,
-        ),
-        fontFamily: 'NotoSans',
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: mainMaterialColor,
+            brightness: Brightness.light,
+          ),
+          fontFamily: 'NotoSans',
       ),
     );
   }

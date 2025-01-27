@@ -11,16 +11,16 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wedding/data/raw/home_raw.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
-import 'package:wedding/screen/main/tabs/home/home_tab_viewmodel.dart';
+import 'package:wedding/screen/home/home_viewmodel.dart';
 
-class HomeTabScreen extends ConsumerStatefulWidget {
-  const HomeTabScreen({super.key});
+class HomeScreen extends ConsumerStatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  ConsumerState<HomeTabScreen> createState() => _HomeTabScreen();
+  ConsumerState<HomeScreen> createState() => _HomeScreen();
 }
 
-class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
+class _HomeScreen extends ConsumerState<HomeScreen> {
   late final PageController pageController;
 
   @override
@@ -153,7 +153,7 @@ class _HomeTabScreen extends ConsumerState<HomeTabScreen> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.grey[500]!, Colors.white],
+          colors: [tertiaryColor, Colors.white],
         ),
       ),
       child: Column(

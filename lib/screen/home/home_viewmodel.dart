@@ -17,9 +17,9 @@ class Success extends HomeTabState {
   Success({required this.items});
 }
 
-class HomeTabViewModel extends StateNotifier<HomeTabState> {
+class HomeViewModel extends StateNotifier<HomeTabState> {
   final HomeRepository _repository;
-  HomeTabViewModel(this._repository) : super(const Loading()) {
+  HomeViewModel(this._repository) : super(const Loading()) {
     loadItems();
   }
 

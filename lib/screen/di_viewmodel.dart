@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wedding/data/di_repository.dart';
+import 'package:wedding/screen/home/home_viewmodel.dart';
 import 'package:wedding/screen/intro/intro_viewmodel.dart';
 import 'package:wedding/screen/main/main_viewmodel.dart';
 import 'package:wedding/screen/main/tabs/event/event_tab_viewmodel.dart';
-import 'package:wedding/screen/main/tabs/home/home_tab_viewmodel.dart';
 import 'package:wedding/screen/quiz/quiz_viewmodel.dart';
 import 'package:wedding/screen/signin/signin_viewmodel.dart';
 
@@ -28,9 +28,9 @@ final mainViewModelProvider = StateNotifierProvider<MainViewModel, MainState>((r
   return MainViewModel(repository);
 });
 
-final homeTabViewModelProvider = StateNotifierProvider<HomeTabViewModel, HomeTabState>((ref) {
+final homeTabViewModelProvider = StateNotifierProvider<HomeViewModel, HomeTabState>((ref) {
   final repository = ref.watch(homeRepositoryProvider);
-  return HomeTabViewModel(repository);
+  return HomeViewModel(repository);
 });
 
 final eventTabViewModelProvider = StateNotifierProvider<EventTabViewModel, EventTabState>((ref) {
