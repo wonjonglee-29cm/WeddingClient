@@ -3,7 +3,7 @@ import 'package:wedding/data/raw/component_raw.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/utils/color_utils.dart';
 
-Widget textWidget(TextRaw raw) {
+Widget textWidget(TextRaw raw, double? horizontalPadding) {
   // 정렬 방향 설정
   final alignment = raw.align == 'center' ? MainAxisAlignment.center : MainAxisAlignment.start;
 
@@ -29,7 +29,7 @@ Widget textWidget(TextRaw raw) {
   return Container(
     width: double.infinity,
     color: raw.bgColor?.toColor(),
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+    padding: EdgeInsets.symmetric(horizontal: horizontalPadding ?? 20.0),
     child: Column(
       crossAxisAlignment: raw.align == 'center' ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
@@ -54,6 +54,7 @@ Widget textWidget(TextRaw raw) {
           style: bodyStyle,
           textAlign: textAlign,
         ),
+        itemsGap
       ],
     ),
   );
