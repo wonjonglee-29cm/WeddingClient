@@ -67,6 +67,8 @@ class ComponentsRepository {
           return AccountRaw.fromJson(item);
         case 'line':
           return LineRaw.fromJson(item);
+        case 'space':
+          return SpaceRaw.fromJson(item);
         default:
           return null;
       }

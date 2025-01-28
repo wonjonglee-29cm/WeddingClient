@@ -49,24 +49,37 @@ class GateRaw extends ComponentRaw {
   }
 }
 
+class SpaceRaw extends ComponentRaw {
+  final String? bgColor;
+  final double? height;
+
+  SpaceRaw({
+    required super.type,
+    this.bgColor,
+    this.height,
+  });
+
+  factory SpaceRaw.fromJson(Map<String, dynamic> json) {
+    return SpaceRaw(
+      type: json['type'],
+      bgColor: json['bgColor'],
+      height: json['height']?.toDouble(),
+    );
+  }
+}
+
 class LineRaw extends ComponentRaw {
   final String? color;
-  final double? paddingTop;
-  final double? paddingBottom;
 
   LineRaw({
     required super.type,
     this.color,
-    this.paddingTop,
-    this.paddingBottom,
   });
 
   factory LineRaw.fromJson(Map<String, dynamic> json) {
     return LineRaw(
       type: json['type'],
       color: json['color'],
-      paddingTop: json['paddingTop']?.toDouble(),
-      paddingBottom: json['paddingBottom']?.toDouble(),
     );
   }
 }

@@ -14,7 +14,7 @@ final memberRepositoryProvider = Provider<MemberRepository>((ref) {
   );
 });
 
-final homeRepositoryProvider = Provider<ComponentsRepository>((ref) {
+final componentRepositoryProvider = Provider<ComponentsRepository>((ref) {
   final prefsValue = ref.watch(sharedPreferencesProvider);
   return prefsValue.when(
     data: (prefs) => ComponentsRepository(prefs),

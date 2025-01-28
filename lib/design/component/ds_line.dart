@@ -6,17 +6,11 @@ Widget lineWidget(LineRaw raw, double? horizontalPadding) {
   return Column(
     children: [
       Padding(
-          padding: EdgeInsets.only(
-            left: horizontalPadding ?? 20.0,
-            right: horizontalPadding ?? 20.0,
-            top: raw.paddingTop ?? 0,
-            bottom: raw.paddingBottom ?? 0
-          ),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding ?? 20.0),
           child: Container(
-            height: 1,  // 1px 두께
+            height: 1, // 1px 두께
             color: raw.color?.toColor() ?? Colors.black,
-          )
-      ),
+          )),
     ],
   );
 }

@@ -3,6 +3,7 @@ import 'package:wedding/data/di_repository.dart';
 import 'package:wedding/data/raw/component_raw.dart';
 import 'package:wedding/screen/home/home_viewmodel.dart';
 import 'package:wedding/screen/intro/intro_viewmodel.dart';
+import 'package:wedding/screen/invite/invite_viewmodel.dart';
 import 'package:wedding/screen/main/main_viewmodel.dart';
 import 'package:wedding/screen/quiz/quiz_viewmodel.dart';
 import 'package:wedding/screen/signin/signin_viewmodel.dart';
@@ -29,8 +30,13 @@ final mainViewModelProvider = StateNotifierProvider<MainViewModel, MainState>((r
 });
 
 final homeViewModelProvider = StateNotifierProvider<HomeViewModel, AsyncValue<List<ComponentRaw>>>((ref) {
-  final repository = ref.watch(homeRepositoryProvider);
+  final repository = ref.watch(componentRepositoryProvider);
   return HomeViewModel(repository);
+});
+
+final inviteViewModelProvider = StateNotifierProvider<InviteViewModel, AsyncValue<List<ComponentRaw>>>((ref) {
+  final repository = ref.watch(componentRepositoryProvider);
+  return InviteViewModel(repository);
 });
 
 final quizViewModelProvider = StateNotifierProvider<QuizViewModel, QuizState>((ref) {
