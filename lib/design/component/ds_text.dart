@@ -10,8 +10,8 @@ Widget textWidget(TextRaw raw) {
   // 텍스트 정렬 설정
   final textAlign = raw.align == 'center' ? TextAlign.center : TextAlign.start;
 
-  final titleStyle = raw.align == 'center' ? titleStyle1.copyWith(height: 3) : titleStyle2.copyWith(height: 1.2);
-  final bodyStyle = raw.align == 'center' ? bodyStyle1.copyWith(height: 2.2) : bodyStyle2.copyWith(height: 1.2);
+  final titleStyle = raw.align == 'center' ? titleStyle1.copyWith(height: 3) : titleStyle2;
+  final bodyStyle = raw.align == 'center' ? bodyStyle1.copyWith(height: 2.2) : bodyStyle2.copyWith(height: 1.75);
 
   // 아이콘 매핑
   IconData? icon;

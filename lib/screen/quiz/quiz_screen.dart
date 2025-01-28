@@ -2,11 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wedding/data/raw/quiz_raw.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
 import 'package:wedding/screen/quiz/quiz_viewmodel.dart';
-import 'dart:html' as html;
 
 class QuizScreen extends ConsumerStatefulWidget {
   const QuizScreen({super.key});
@@ -95,11 +95,18 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
 
   Widget buildWebView() {
     const uri = 'https://captainwonjong.notion.site/LeeWonJong-Android-Dev-a6e27f81420f4b0bad7b0271a3d5366f';
+
     if (kIsWeb) {
       return Center(
         child: ElevatedButton(
-          onPressed: () {
-            html.window.open(uri, '_blank');
+          onPressed: () async {
+            final url = Uri.parse(uri);
+            if (await canLaunchUrl(url)) {
+              await launchUrl(
+                url,
+                mode: LaunchMode.externalApplication,
+              );
+            }
           },
           child: const Text('퀴즈 확인하기'),
         ),
