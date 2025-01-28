@@ -68,8 +68,7 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1.0,
+        backgroundColor: tertiaryColor,
         title: const Text('Quiz', style: appBarStyle),
       ),
       body: Consumer(

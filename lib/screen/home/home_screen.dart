@@ -25,7 +25,10 @@ class HomeScreen extends HookConsumerWidget {
     return state.when(
       loading: () => loadingWidget(),
       error: (error, _) => errorWidget(onRetry: () => ref.read(homeViewModelProvider.notifier).loadItems()),
-      data: (items) => componentsContainerWidget(items, pageController: pageController, horizontalPadding: horizontalPadding),
+      data: (items) => Scaffold(
+        backgroundColor: const Color(0x00fefefd),
+        body: componentsContainerWidget(items, pageController: pageController, horizontalPadding: horizontalPadding),
+      ),
     );
   }
 }

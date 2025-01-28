@@ -19,9 +19,8 @@ class MyTabScreen extends HookConsumerWidget {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 1.0,
-          title: const Text('이벤트', style: appBarStyle),
+          backgroundColor: tertiaryColor,
+          title: const Text('하객 정보', style: appBarStyle),
         ),
         body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Expanded(
