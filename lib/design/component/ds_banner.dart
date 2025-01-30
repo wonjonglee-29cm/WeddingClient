@@ -12,7 +12,7 @@ Widget bannerWidget(PageController pageController, BannerRaw raw) {
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [raw.bgColor.toColor(), Colors.white],
+        colors: [raw.bgColor.toColor(), Colors.transparent],
       ),
     ),
     child: Column(

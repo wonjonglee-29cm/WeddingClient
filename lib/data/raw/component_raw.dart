@@ -112,6 +112,22 @@ class TextRaw extends ComponentRaw {
   }
 }
 
+class ColorRaw extends ComponentRaw {
+  final List<String> colors;
+
+  ColorRaw({
+    required this.colors,
+    required super.type,
+  });
+
+  factory ColorRaw.fromJson(Map<String, dynamic> json) {
+    return ColorRaw(
+      type: json['type'],
+      colors: List<String>.from(json['colors']),
+    );
+  }
+}
+
 class CoupleInfoRaw extends ComponentRaw {
   final String brideImageUrl;
   final String groomImageUrl;

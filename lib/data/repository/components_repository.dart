@@ -49,30 +49,33 @@ class ComponentsRepository {
     final json = jsonDecode(jsonString);
     final items = json['items'] as List;
 
-    return items.map((item) {
-      switch(item['type']) {
-        case 'banner':
-          return BannerRaw.fromJson(item);
-        case 'gate':
-          return GateRaw.fromJson(item);
-        case 'text':
-          return TextRaw.fromJson(item);
-        case 'couple-info':
-          return CoupleInfoRaw.fromJson(item);
-        case 'image':
-          return ImageRaw.fromJson(item);
-        case 'button':
-          return ButtonRaw.fromJson(item);
-        case 'account':
-          return AccountRaw.fromJson(item);
-        case 'line':
-          return LineRaw.fromJson(item);
-        case 'space':
-          return SpaceRaw.fromJson(item);
-        default:
-          return null;
-      }
-    })
+    return items
+        .map((item) {
+          switch (item['type']) {
+            case 'banner':
+              return BannerRaw.fromJson(item);
+            case 'gate':
+              return GateRaw.fromJson(item);
+            case 'text':
+              return TextRaw.fromJson(item);
+            case 'couple-info':
+              return CoupleInfoRaw.fromJson(item);
+            case 'image':
+              return ImageRaw.fromJson(item);
+            case 'button':
+              return ButtonRaw.fromJson(item);
+            case 'account':
+              return AccountRaw.fromJson(item);
+            case 'line':
+              return LineRaw.fromJson(item);
+            case 'space':
+              return SpaceRaw.fromJson(item);
+            case 'color':
+              return ColorRaw.fromJson(item);
+            default:
+              return null;
+          }
+        })
         .whereType<ComponentRaw>()
         .toList();
   }

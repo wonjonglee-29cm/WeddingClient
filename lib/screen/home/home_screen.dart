@@ -27,7 +27,7 @@ class HomeScreen extends HookConsumerWidget {
       error: (error, _) => errorWidget(onRetry: () => ref.read(homeViewModelProvider.notifier).loadItems()),
       data: (items) => Scaffold(
         backgroundColor: const Color(0x00fefefd),
-        body: componentsContainerWidget(items, pageController: pageController, horizontalPadding: horizontalPadding),
+        body: componentsContainerWidget(items, context: context, pageController: pageController, horizontalPadding: horizontalPadding),
       ),
     );
   }

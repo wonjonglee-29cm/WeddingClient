@@ -1,56 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wedding/data/raw/component_raw.dart';
 import 'package:wedding/design/ds_foundation.dart';
 
-Widget gateWidget(String text, String? imageType, String link, double? horizontalPadding) {
+Widget gateWidget(GateRaw gate, double? horizontalPadding) {
   return Column(
     children: [
       Padding(
           padding: EdgeInsets.symmetric(horizontal: horizontalPadding ?? 20.0),
           child: InkWell(
               onTap: () async {
-                final url = Uri.parse(link);
+                final url = Uri.parse(gate.link);
                 if (await canLaunchUrl(url)) {
                   await launchUrl(url, mode: LaunchMode.externalApplication);
                 }
               },
               child: Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1,
-                  ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Row(
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Icon(
-                          imageType == 'video'
+                          gate.imageType == 'video'
                               ? Icons.videocam_outlined
-                              : imageType == 'image'
+                              : gate.imageType == 'image'
                                   ? Icons.image
                                   : Icons.videocam_outlined,
-                          size: 40,
+                          size: 32,
                         ),
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              text,
+                              gate.text,
                               style: titleStyle2,
                             ),
                           ],
                         ),
                       ),
-                      const Icon(Icons.arrow_forward_ios, size: 16),
+                      const Icon(Icons.arrow_forward_ios, size: 20),
                     ],
                   ),
                 ),

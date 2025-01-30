@@ -5,6 +5,7 @@ import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/design/error/ds_error.dart';
 import 'package:wedding/design/loading/ds_loading.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
+import 'package:wedding/utils/color_utils.dart';
 
 class InviteScreen extends HookConsumerWidget {
   const InviteScreen({super.key});
@@ -20,10 +21,11 @@ class InviteScreen extends HookConsumerWidget {
       data: (items) => Scaffold(
         appBar: AppBar(
           backgroundColor: tertiaryColor,
-          title: const Text('에식 안내', style: appBarStyle),
+          scrolledUnderElevation: 0,
+          surfaceTintColor: Colors.transparent,
+          title: const Text('예식 안내', style: appBarStyle),
         ),
-        backgroundColor: const Color(0x00fefefd),
-        body: componentsContainerWidget(items, horizontalPadding: horizontalPadding),
+        body: componentsContainerWidget(items, context: context, horizontalPadding: horizontalPadding),
       ),
     );
   }

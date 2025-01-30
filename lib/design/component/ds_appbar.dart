@@ -17,7 +17,7 @@ AppBar closeAppBar(BuildContext context, String title) => AppBar(backgroundColor
       ),
     ]);
 
-SystemUiOverlayStyle systemStyle = SystemUiOverlayStyle(
+SystemUiOverlayStyle systemStyle = const SystemUiOverlayStyle(
   statusBarColor: tertiaryColor,
   statusBarIconBrightness: Brightness.dark,
   statusBarBrightness: Brightness.light,
