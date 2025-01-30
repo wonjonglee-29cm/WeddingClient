@@ -54,7 +54,9 @@ Widget textWidget(TextRaw raw, double? horizontalPadding) {
           style: bodyStyle,
           textAlign: textAlign,
         ),
-        itemsGap
+        if (!raw.noGap) ...[
+          itemsGap
+        ]
       ],
     ),
   );

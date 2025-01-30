@@ -5,7 +5,6 @@ import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/design/error/ds_error.dart';
 import 'package:wedding/design/loading/ds_loading.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
-import 'package:wedding/utils/color_utils.dart';
 
 class InviteScreen extends HookConsumerWidget {
   const InviteScreen({super.key});
@@ -17,7 +16,7 @@ class InviteScreen extends HookConsumerWidget {
 
     return state.when(
       loading: () => loadingWidget(),
-      error: (error, _) => errorWidget(onRetry: () => ref.read(homeViewModelProvider.notifier).loadItems()),
+      error: (error, _) => errorWidget(onRetry: () => ref.read(inviteViewModelProvider.notifier).loadItems()),
       data: (items) => Scaffold(
         appBar: AppBar(
           backgroundColor: tertiaryColor,

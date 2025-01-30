@@ -90,6 +90,7 @@ class TextRaw extends ComponentRaw {
   final String body;
   final String? bgColor;
   final String? iconType;
+  final bool noGap;
 
   TextRaw({
     required this.align,
@@ -97,6 +98,7 @@ class TextRaw extends ComponentRaw {
     required this.body,
     this.bgColor,
     this.iconType,
+    this.noGap = false,
     required super.type,
   });
 
@@ -108,15 +110,18 @@ class TextRaw extends ComponentRaw {
       body: json['body'],
       bgColor: json['bgColor'],
       iconType: json['iconType'],
+      noGap: json['noGap'] ?? false,
     );
   }
 }
 
 class ColorRaw extends ComponentRaw {
   final List<String> colors;
+  final String? bgColor;
 
   ColorRaw({
     required this.colors,
+    this.bgColor,
     required super.type,
   });
 
@@ -124,6 +129,7 @@ class ColorRaw extends ComponentRaw {
     return ColorRaw(
       type: json['type'],
       colors: List<String>.from(json['colors']),
+      bgColor: json['bgColor'],
     );
   }
 }
