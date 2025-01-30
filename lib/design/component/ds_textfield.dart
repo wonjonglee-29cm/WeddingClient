@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wedding/design/ds_foundation.dart';
 
-class WeddingTextField extends StatelessWidget {
+class TextFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
   final String? hint;
   final String? labelText;
@@ -11,7 +12,7 @@ class WeddingTextField extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final InputDecoration? decoration;
 
-  const WeddingTextField({
+  const TextFieldWidget({
     super.key,
     this.controller,
     this.hint,
@@ -32,6 +33,10 @@ class WeddingTextField extends StatelessWidget {
         Stack(
           children: [
             TextFormField(
+              style: bodyStyle2,
+              cursorColor: secondaryColor,
+              cursorErrorColor: Colors.red,
+              cursorWidth: 2,
               controller: controller,
               maxLength: maxLength,
               onChanged: onChanged,

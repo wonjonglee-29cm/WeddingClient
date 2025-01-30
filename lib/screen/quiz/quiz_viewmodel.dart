@@ -66,6 +66,10 @@ class QuizViewModel extends StateNotifier<QuizState> {
     }
   }
 
+  Future<void> changeStateDone() async {
+    state = const Done();
+  }
+
   Future<bool> postQuizAnswer(int quizId, int answerOrder) async {
     if (_isSubmitting) return false;
 

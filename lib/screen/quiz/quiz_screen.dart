@@ -4,6 +4,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wedding/data/raw/quiz_raw.dart';
+import 'package:wedding/design/component/ds_bottom_button.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
 import 'package:wedding/screen/quiz/quiz_viewmodel.dart';
@@ -46,7 +47,6 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('모든 문제를 풀었습니다')),
           );
-          Navigator.of(context).pop();
         }
       } else {
         final state = ref.read(quizViewModelProvider);
@@ -96,18 +96,21 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
     const uri = 'https://captainwonjong.notion.site/LeeWonJong-Android-Dev-a6e27f81420f4b0bad7b0271a3d5366f';
 
     if (kIsWeb) {
-      return Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            final url = Uri.parse(uri);
-            if (await canLaunchUrl(url)) {
-              await launchUrl(
-                url,
-                mode: LaunchMode.externalApplication,
-              );
-            }
-          },
-          child: const Text('퀴즈 확인하기'),
+      return Scaffold(
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: bottomButtonWidget(
+            onPressed: () async {
+              final url = Uri.parse(uri);
+              if (await canLaunchUrl(url)) {
+                await launchUrl(
+                  url,
+                  mode: LaunchMode.externalApplication,
+                );
+              }
+            },
+            text: '정답 확인하기',
+          ),
         ),
       );
     } else {
@@ -127,16 +130,13 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
         LinearProgressIndicator(
           value: (currentPage + 1) / items.length,
           backgroundColor: Colors.grey[200],
-          valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+          valueColor: const AlwaysStoppedAnimation<Color>(primaryColor),
         ),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
             '${currentPage + 1} / ${items.length}',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: titleStyle2,
           ),
         ),
         Expanded(
@@ -147,33 +147,19 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
             itemBuilder: (context, index) {
               final quiz = items[index];
               return SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      quiz.question,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        quiz.question,
+                        style: titleStyle1,
+                      )
                     ),
-                    const SizedBox(height: 20),
-                    ...List.generate(
-                      quiz.options.length,
-                      (optionIndex) => RadioListTile<int>(
-                        title: Text(quiz.options[optionIndex]),
-                        value: optionIndex,
-                        groupValue: _selectedAnswers[quiz.id],
-                        onChanged: quiz.isDone
-                            ? null
-                            : (value) {
-                                setState(() {
-                                  _selectedAnswers[quiz.id] = value!;
-                                });
-                              },
-                      ),
-                    ),
+                    itemsGap,
+                    ...List.generate(quiz.options.length, (optionIndex) => radioItemWidget(quiz, optionIndex)),
                   ],
                 ),
               );
@@ -181,20 +167,69 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: _selectedAnswers.containsKey(items[currentPage].id) ? () => _submitAnswer(items[currentPage].id, _selectedAnswers[items[currentPage].id]!) : null,
-                child: Text(currentPage == items.length - 1 ? '완료' : '다음'),
-              ),
-            ],
+          padding: const EdgeInsets.only(bottom: 20),
+          child: bottomButtonWidget(
+            onPressed: () => _submitAnswer(items[currentPage].id, _selectedAnswers[items[currentPage].id]!),
+            text: currentPage == items.length - 1 ? '완료' : '다음',
+            isEnabled: _selectedAnswers.containsKey(items[currentPage].id),
           ),
         ),
       ],
     );
   }
+
+  Widget radioItemWidget(QuizRaw quiz, int optionIndex) => InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: quiz.isDone
+            ? null
+            : () {
+                setState(() {
+                  _selectedAnswers[quiz.id] = optionIndex;
+                });
+              },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+          child: Row(
+            children: [
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: _selectedAnswers[quiz.id] == optionIndex
+                        ? primaryColor // 선택된 상태 색상
+                        : secondaryColor, // 기본 상태 색상
+                    width: 2,
+                  ),
+                ),
+                child: _selectedAnswers[quiz.id] == optionIndex
+                    ? Center(
+                        child: Container(
+                          width: 12,
+                          height: 12,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: primaryColor, // 선택된 상태의 내부 원 색상
+                          ),
+                        ),
+                      )
+                    : null,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  quiz.options[optionIndex],
+                  style: TextStyle(
+                    fontSize: bodyStyle1.fontSize,
+                    color: quiz.isDone ? Colors.grey : Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 
   @override
   void dispose() {
