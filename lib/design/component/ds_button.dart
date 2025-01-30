@@ -45,14 +45,14 @@ Widget buttonWidget(BuildContext? context, ButtonRaw raw, double? horizontalPadd
                       Text(
                         raw.text,
                         textAlign: TextAlign.center,
-                        style: titleStyle2,
+                        style: bodyStyle1,
                       ),
                       if (raw.hasArrow)
                         const Positioned(
                           right: 0,
                           child: Icon(
                             Icons.arrow_forward_ios,
-                            size: 20,
+                            size: 16,
                             color: Colors.black,
                           ),
                         ),

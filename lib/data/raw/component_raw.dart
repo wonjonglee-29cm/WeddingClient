@@ -221,10 +221,12 @@ class AccountItemRaw {
 }
 
 class AccountRaw extends ComponentRaw {
+  final String title;
   final String? bgColor;
   final List<AccountItemRaw> account;
 
   AccountRaw({
+    required this.title,
     this.bgColor,
     required this.account,
     required super.type,
@@ -233,6 +235,7 @@ class AccountRaw extends ComponentRaw {
   factory AccountRaw.fromJson(Map<String, dynamic> json) {
     return AccountRaw(
       type: json['type'],
+      title: json['title'],
       bgColor: json['bgColor'],
       account: (json['account'] as List).map((item) => AccountItemRaw.fromJson(item)).toList(),
     );

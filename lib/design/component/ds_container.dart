@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wedding/data/raw/component_raw.dart';
+import 'package:wedding/design/component/ds_account.dart';
 import 'package:wedding/design/component/ds_banner.dart';
 import 'package:wedding/design/component/ds_button.dart';
 import 'package:wedding/design/component/ds_color.dart';
@@ -29,7 +30,7 @@ Widget componentsContainerWidget(List<ComponentRaw> items, {BuildContext? contex
             CoupleInfoRaw raw => couplePhotoWidget(raw.groomImageUrl, raw.brideImageUrl),
             ButtonRaw raw => buttonWidget(context, raw, horizontalPadding),
             ColorRaw raw => colorWidget(raw, horizontalPadding),
-            AccountItemRaw raw => const SizedBox.shrink(),
+            AccountRaw raw => accountWidget(raw, horizontalPadding),
             _ => const SizedBox.shrink(),
           };
         }).toList(),
