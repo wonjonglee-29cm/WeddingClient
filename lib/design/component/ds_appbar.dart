@@ -10,16 +10,11 @@ AppBar backAppBar(String title) => AppBar(
       systemOverlayStyle: systemStyle,
     );
 
-AppBar closeAppBar(BuildContext context, String title) => AppBar(
-    backgroundColor: bgColor,
-    scrolledUnderElevation: 0,
-    surfaceTintColor: Colors.transparent,
-    systemOverlayStyle: systemStyle,
-    automaticallyImplyLeading: false,
-    centerTitle: true, title: Text(title, style: appBarStyle), actions: [
+AppBar closeAppBar(BuildContext context, String title, {VoidCallback? onPressed}) =>
+    AppBar(backgroundColor: bgColor, scrolledUnderElevation: 0, surfaceTintColor: Colors.transparent, systemOverlayStyle: systemStyle, automaticallyImplyLeading: false, centerTitle: true, title: Text(title, style: appBarStyle), actions: [
       IconButton(
         icon: const Icon(Icons.close),
-        onPressed: () => Navigator.pop(context),
+        onPressed: onPressed ?? () => Navigator.pop(context),
       ),
     ]);
 

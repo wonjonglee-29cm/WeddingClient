@@ -103,7 +103,8 @@ class _SignScreenState extends ConsumerState<SignInScreen> {
                                 await ref.read(signInViewModelProvider.notifier).signIn(_idController.text, _passwordController.text);
                               }
                             },
-                      text: '로그인')
+                      text: '로그인',
+                      padding: EdgeInsets.zero)
                   .animate()
                   .fadeIn()
                   .slideY(begin: 1, end: 0, delay: const Duration(milliseconds: 400)),

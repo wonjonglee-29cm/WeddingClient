@@ -24,7 +24,7 @@ final userInfoScreenTypeProvider = StateProvider<UserInfoScreenType>((ref) {
   return UserInfoScreenType.init;  // 기본값 설정
 });
 
-final userInfoViewModelProvider = StateNotifierProvider<UserInfoViewModel, UserInfoState>((ref) {
+final userInfoViewModelProvider = StateNotifierProvider.autoDispose<UserInfoViewModel, UserInfoState>((ref) {
   final memberRepository = ref.read(memberRepositoryProvider);
   final screenType = ref.watch(userInfoScreenTypeProvider);
   return UserInfoViewModel(memberRepository, screenType);
