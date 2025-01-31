@@ -32,7 +32,8 @@ class Success extends QuizState {
 }
 
 class Done extends QuizState {
-  const Done();
+  final String link;
+  const Done({required this.link});
 }
 
 class QuizViewModel extends StateNotifier<QuizState> {
@@ -49,7 +50,7 @@ class QuizViewModel extends StateNotifier<QuizState> {
     try {
       final raw = await _repository.getQuizzes();
       if (raw.isAllDone) {
-        state = const Done();
+        changeStateDone();
       } else {
         state = Success(items: raw.items, currentPage: raw.items.indexWhere((quiz) => !quiz.isDone));
       }
@@ -67,7 +68,8 @@ class QuizViewModel extends StateNotifier<QuizState> {
   }
 
   Future<void> changeStateDone() async {
-    state = const Done();
+    final link = await _repository.getQuizSuccessLink();
+    state = Done(link: link);
   }
 
   Future<bool> postQuizAnswer(int quizId, int answerOrder) async {
@@ -79,25 +81,15 @@ class QuizViewModel extends StateNotifier<QuizState> {
 
       if (state case Success s) {
         final updatedItems = s.items.map((quiz) {
-          return quiz.id == quizId
-              ? QuizRaw(
-              id: quiz.id,
-              question: quiz.question,
-              options: quiz.options,
-              isDone: true
-          )
-              : quiz;
+          return quiz.id == quizId ? QuizRaw(id: quiz.id, question: quiz.question, options: quiz.options, isDone: true) : quiz;
         }).toList();
 
         if (updatedItems.every((quiz) => quiz.isDone)) {
-          state = const Done();
+          changeStateDone();
           return true;
         }
 
-        state = Success(
-            items: updatedItems,
-            currentPage: s.currentPage + 1
-        );
+        state = Success(items: updatedItems, currentPage: s.currentPage + 1);
 
         return false;
       }

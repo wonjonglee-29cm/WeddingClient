@@ -10,11 +10,11 @@ import 'package:wedding/design/component/ds_image.dart';
 import 'package:wedding/design/component/ds_line.dart';
 import 'package:wedding/design/component/ds_spacer.dart';
 import 'package:wedding/design/component/ds_text.dart';
-import 'package:wedding/utils/color_utils.dart';
+import 'package:wedding/design/ds_foundation.dart';
 
 Widget componentsContainerWidget(List<ComponentRaw> items, {BuildContext? context, PageController? pageController, double? horizontalPadding}) {
   return Container(
-    color: '#FEFEFD'.toColor(),
+    color: bgColor,
     child: SingleChildScrollView(
         child: Padding(
       padding: const EdgeInsets.only(bottom: 40),

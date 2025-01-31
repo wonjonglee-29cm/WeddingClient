@@ -4,6 +4,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wedding/data/raw/quiz_raw.dart';
+import 'package:wedding/design/component/ds_appbar.dart';
 import 'package:wedding/design/component/ds_bottom_button.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
@@ -67,10 +68,7 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: tertiaryColor,
-        title: const Text('Quiz', style: appBarStyle),
-      ),
+      appBar: normalAppBar('Quiz'),
       body: Consumer(
         builder: (context, ref, _) {
           final state = ref.watch(quizViewModelProvider);
@@ -84,7 +82,7 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
                 currentPage: final currentPage,
               ) =>
                 _buildQuizContent(items, currentPage),
-              Done() => buildWebView(),
+              Done() => buildWebView(link: state.link),
             }),
           );
         },
@@ -92,16 +90,14 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
     );
   }
 
-  Widget buildWebView() {
-    const uri = 'https://captainwonjong.notion.site/LeeWonJong-Android-Dev-a6e27f81420f4b0bad7b0271a3d5366f';
-
+  Widget buildWebView({required String link}) {
     if (kIsWeb) {
       return Scaffold(
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: bottomButtonWidget(
             onPressed: () async {
-              final url = Uri.parse(uri);
+              final url = Uri.parse(link);
               if (await canLaunchUrl(url)) {
                 await launchUrl(
                   url,
@@ -116,7 +112,7 @@ class _QuizScreen extends ConsumerState<QuizScreen> {
     } else {
       return InAppWebView(
         initialUrlRequest: URLRequest(
-          url: WebUri(uri),
+          url: WebUri(link),
         ),
       );
     }

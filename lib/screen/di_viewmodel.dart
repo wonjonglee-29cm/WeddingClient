@@ -19,7 +19,7 @@ final signInViewModelProvider = StateNotifierProvider<SignInViewModel, SignInSta
   return SignInViewModel(ref.watch(memberRepositoryProvider));
 });
 
-final userInfoViewModelProvider = StateNotifierProvider<UserInfoViewModel, UserInfoState>((ref) {
+final userInfoViewModelProvider = StateNotifierProvider.autoDispose<UserInfoViewModel, UserInfoState>((ref) {
   final memberRepository = ref.watch(memberRepositoryProvider);
   return UserInfoViewModel(memberRepository);
 });

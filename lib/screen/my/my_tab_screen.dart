@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wedding/design/anim/ds_slide_route.dart';
-import 'package:wedding/design/ds_foundation.dart';
+import 'package:wedding/design/component/ds_appbar.dart';
 import 'package:wedding/screen/greeting/greeting_screen.dart';
 import 'package:wedding/screen/userinfo/user_info_screen.dart';
 
@@ -18,10 +18,7 @@ class MyTabScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: tertiaryColor,
-          title: const Text('하객 정보', style: appBarStyle),
-        ),
+        appBar: normalAppBar('내 정보'),
         body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Expanded(
             child: ListView.builder(

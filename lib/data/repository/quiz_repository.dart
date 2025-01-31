@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding/data/raw/quiz_answers_raw.dart';
 import 'package:wedding/data/raw/quiz_raw.dart';
 import 'package:wedding/data/remote/api.dart';
+import 'package:wedding/data/remote/static-api.dart';
 
 class QuizRepository {
   final SharedPreferences _prefs;
@@ -26,5 +29,10 @@ class QuizRepository {
     assert(userId != null, 'User ID is null');
 
     await Api.postAnswer(QuizAnswerRequestRaw(quizId: quizId, userId: userId!, answerOrder: answerOrder));
+  }
+
+  Future<String> getQuizSuccessLink() async {
+    final response = await StaticApi.getQuizSuccessLink();
+    return response.data['link'] ?? '';
   }
 }

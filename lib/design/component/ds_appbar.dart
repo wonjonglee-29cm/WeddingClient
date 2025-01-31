@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:wedding/design/ds_foundation.dart';
 
 AppBar backAppBar(String title) => AppBar(
-      backgroundColor: tertiaryColor,
+      backgroundColor: bgColor,
       scrolledUnderElevation: 0,
       surfaceTintColor: Colors.transparent,
       title: Text(title, style: appBarStyle),
@@ -11,7 +11,7 @@ AppBar backAppBar(String title) => AppBar(
     );
 
 AppBar closeAppBar(BuildContext context, String title) => AppBar(
-    backgroundColor: tertiaryColor,
+    backgroundColor: bgColor,
     scrolledUnderElevation: 0,
     surfaceTintColor: Colors.transparent,
     systemOverlayStyle: systemStyle,
@@ -24,14 +24,14 @@ AppBar closeAppBar(BuildContext context, String title) => AppBar(
     ]);
 
 AppBar normalAppBar(String title) => AppBar(
-      backgroundColor: tertiaryColor,
+      backgroundColor: bgColor,
       scrolledUnderElevation: 0,
       surfaceTintColor: Colors.transparent,
       title: Text(title, style: appBarStyle),
     );
 
 SystemUiOverlayStyle systemStyle = const SystemUiOverlayStyle(
-  statusBarColor: tertiaryColor,
+  statusBarColor: bgColor,
   statusBarIconBrightness: Brightness.dark,
   statusBarBrightness: Brightness.light,
 );

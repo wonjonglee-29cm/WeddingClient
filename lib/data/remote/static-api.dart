@@ -35,4 +35,9 @@ class StaticApi {
     final dio = await getDio();
     return dio.get('/invite.json');
   }
+
+  static Future<Response> getQuizSuccessLink() async {
+    final dio = await getDio();
+    return dio.get('/quiz.json');
+  }
 }
