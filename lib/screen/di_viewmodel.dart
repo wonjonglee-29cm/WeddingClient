@@ -7,6 +7,7 @@ import 'package:wedding/screen/invite/invite_viewmodel.dart';
 import 'package:wedding/screen/main/main_viewmodel.dart';
 import 'package:wedding/screen/quiz/quiz_viewmodel.dart';
 import 'package:wedding/screen/signin/signin_viewmodel.dart';
+import 'package:wedding/screen/userinfo/user_info_screen.dart';
 
 import 'greeting/greeting_viewmodel.dart';
 import 'userinfo/user_info_viewmodel.dart';
@@ -19,9 +20,14 @@ final signInViewModelProvider = StateNotifierProvider<SignInViewModel, SignInSta
   return SignInViewModel(ref.watch(memberRepositoryProvider));
 });
 
-final userInfoViewModelProvider = StateNotifierProvider.autoDispose<UserInfoViewModel, UserInfoState>((ref) {
-  final memberRepository = ref.watch(memberRepositoryProvider);
-  return UserInfoViewModel(memberRepository);
+final userInfoScreenTypeProvider = StateProvider<UserInfoScreenType>((ref) {
+  return UserInfoScreenType.init;  // 기본값 설정
+});
+
+final userInfoViewModelProvider = StateNotifierProvider<UserInfoViewModel, UserInfoState>((ref) {
+  final memberRepository = ref.read(memberRepositoryProvider);
+  final screenType = ref.watch(userInfoScreenTypeProvider);
+  return UserInfoViewModel(memberRepository, screenType);
 });
 
 final mainViewModelProvider = StateNotifierProvider<MainViewModel, MainState>((ref) {

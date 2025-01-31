@@ -3,6 +3,8 @@ import 'package:wedding/data/raw/user_info_raw.dart';
 import 'package:wedding/data/repository/member_repository.dart';
 import 'package:wedding/screen/userinfo/user_info_guest_type.dart';
 
+import 'user_info_screen.dart';
+
 class UserInfoState {
   final bool? willAttend;
   final GuestType? guestType;
@@ -50,11 +52,37 @@ class UserInfoState {
     return willAttend != null && guestType != null && hasCompanion != null && (hasCompanion == false || (hasCompanion == true && companionCount != null)) && willEat != null;
   }
 }
-
 class UserInfoViewModel extends StateNotifier<UserInfoState> {
   final MemberRepository _memberRepository;
+  final UserInfoScreenType screenType;
 
-  UserInfoViewModel(this._memberRepository) : super(UserInfoState());
+  UserInfoViewModel(this._memberRepository, this.screenType) : super(UserInfoState()) {
+    if (screenType == UserInfoScreenType.update) {
+      _initializeData();
+    }
+  }
+
+  Future<void> _initializeData() async {
+    state = state.copyWith(isLoading: true, error: null);
+
+    try {
+      final userInfo = await _memberRepository.findMe();
+      state = state.copyWith(
+        isLoading: false,
+        willAttend: userInfo.isAttendance,
+        guestType: GuestType.fromString(userInfo.guestType),
+        hasCompanion: userInfo.isCompanion,
+        companionCount: userInfo.isCompanion == true ? userInfo.companionCount : null,
+        willEat: userInfo.isMeal,
+        userInfo: userInfo,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      );
+    }
+  }
 
   void updateWillAttend(bool? value) {
     state = state.copyWith(willAttend: value);
@@ -65,7 +93,17 @@ class UserInfoViewModel extends StateNotifier<UserInfoState> {
   }
 
   void updateHasCompanion(bool? value) {
-    state = state.copyWith(hasCompanion: value, companionCount: value == false ? 0 : null);
+    if (value == true) {
+      state = state.copyWith(
+        hasCompanion: value,
+        companionCount: state.companionCount ?? 1,
+      );
+    } else {
+      state = state.copyWith(
+        hasCompanion: value,
+        companionCount: null,
+      );
+    }
   }
 
   void updateCompanionCount(int? value) {
