@@ -8,7 +8,7 @@ import 'package:wedding/screen/di_viewmodel.dart';
 import 'package:wedding/screen/greeting/greeting_screen.dart';
 import 'package:wedding/screen/home/home_screen.dart';
 import 'package:wedding/screen/invite/invite_screen.dart';
-import 'package:wedding/screen/my/my_tab_screen.dart';
+import 'package:wedding/screen/my/my_screen.dart';
 import 'package:wedding/screen/quiz/quiz_screen.dart';
 
 class MainScreen extends HookConsumerWidget {
@@ -21,7 +21,7 @@ class MainScreen extends HookConsumerWidget {
     const HomeScreen(),
     const InviteScreen(),
     const QuizScreen(),
-    const MyTabScreen(),
+    const MyScreen(),
   ];
 
   @override
@@ -91,8 +91,8 @@ class MainScreen extends HookConsumerWidget {
           currentIndex: currentIndex,
           onTap: (index) => ref.read(mainViewModelProvider.notifier).updateIndex(index),
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home_outlined, size: 20), label: '홈'),
-            BottomNavigationBarItem(icon: Icon(Icons.mail_outline, size: 20), label: '초대장'),
+            BottomNavigationBarItem(icon: Icon(Icons.home_outlined, size: 20), label: '초대장'),
+            BottomNavigationBarItem(icon: Icon(Icons.mail_outline, size: 20), label: '예식 안내'),
             BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/images/quiz.png'), size: 20), label: 'Quiz'),
             BottomNavigationBarItem(icon: Icon(Icons.person_outline, size: 20), label: '내 정보'),
           ],

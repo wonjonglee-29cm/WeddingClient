@@ -114,23 +114,4 @@ class _SignScreenState extends ConsumerState<SignInScreen> {
       ),
     );
   }
-
-  InputDecoration defaultDecor({String? hint, String? labelText}) => InputDecoration(
-        hintText: hint,
-        hintStyle: bodyStyle2.copyWith(color: Colors.grey[300]),
-        labelText: labelText,
-        labelStyle: bodyStyle2,
-        border: const OutlineInputBorder(
-          borderSide: BorderSide(color: primaryColor),
-        ),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: secondaryColor),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: primaryColor, width: 2),
-        ),
-        fillColor: Colors.white,
-        // 배경색
-        filled: true,
-      );
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wedding/design/component/ds_appbar.dart';
+import 'package:wedding/design/component/ds_bottom_button.dart';
+import 'package:wedding/design/component/ds_textfield.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
 
@@ -33,7 +35,7 @@ class GreetingScreen extends HookConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: closeAppBar(context, '방명록'),
+      appBar: closeAppBar(context, '축하의 말'),
       body: state.when(
         data: (_) => _buildContent(context, ref, controller),
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -44,13 +46,13 @@ class GreetingScreen extends HookConsumerWidget {
 
   Widget _buildContent(BuildContext context, WidgetRef ref, TextEditingController controller) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           title2Gap,
-          const Text('축하인사를 작성해주세요', style: titleStyle2),
-          title2Gap,
+          const Text('신랑과 신부에게 축하의 말을 전해주세요.', style: titleStyle2),
+          itemsGap,
           Expanded(
               child: TextField(
             controller: controller,
@@ -59,20 +61,15 @@ class GreetingScreen extends HookConsumerWidget {
             expands: true,
             textAlignVertical: TextAlignVertical.top,
             cursorColor: Colors.black87,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black87),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-            ),
+            decoration: defaultDecor(hint: '123', labelText: '123'),
           )),
           itemsGap,
-          ElevatedButton(
-            onPressed: () => _submit(context, ref, controller),
-            child: const Text('전달하기'),
+          bottomButtonWidget(
+            onPressed: () async {
+              _submit(context, ref, controller);
+            },
+            text: '전달하기',
+            padding: EdgeInsets.zero,
           ),
         ],
       ),

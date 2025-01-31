@@ -5,14 +5,14 @@ import 'package:wedding/design/component/ds_appbar.dart';
 import 'package:wedding/screen/greeting/greeting_screen.dart';
 import 'package:wedding/screen/userinfo/user_info_screen.dart';
 
-class MyTabScreen extends HookConsumerWidget {
+class MyScreen extends HookConsumerWidget {
   // static final로 변경
   static final _items = [
-    const _Item(key: 'info', icon: Icons.directions_run, text: '참석여부 수정하기'),
-    const _Item(key: 'greeting', icon: Icons.mail_outline, text: '방명록 수정하기'),
+    const _Item(key: 'info', icon: Icons.directions_run, text: '참석 정보 수정하기'),
+    const _Item(key: 'greeting', icon: Icons.mail_outline, text: '축하의 말 수정하기'),
   ];
 
-  const MyTabScreen({super.key});
+  const MyScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

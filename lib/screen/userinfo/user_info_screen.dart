@@ -52,10 +52,17 @@ class UserInfoScreen extends HookConsumerWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    itemsGap,
+                    const SizedBox(
+                      width: double.infinity,
+                      child: Text('참석의 부담은 가지지 말아주시고,\n정성껏 준비하기 위해 여쭙는 것이니\n참석 정보를 알려주시면 감사하겠습니다.', style: bodyStyle1, textAlign: TextAlign.center),
+                    ),
+                    itemsGap,
+                    itemsGap,
                     buildSelectionButtons('결혼식 참석 여부를 알려 주세요.', {true: '참석', false: '불참'}, state.willAttend, (value) => viewModel.updateWillAttend(value), description: '(나중에 수정할 수 있어요.)'),
                     buildSection(
                       '신랑측 하객인가요, 신부측 하객인가요?',

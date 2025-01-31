@@ -43,11 +43,13 @@ class TextFieldWidget extends StatelessWidget {
               validator: validator,
               obscureText: obscureText,
               keyboardType: keyboardType,
-              decoration: (decoration ?? InputDecoration(
-                hintText: hint,
-                labelText: labelText,
-                border: const OutlineInputBorder(),
-              )).copyWith(
+              decoration: (decoration ??
+                      InputDecoration(
+                        hintText: hint,
+                        labelText: labelText,
+                        border: const OutlineInputBorder(),
+                      ))
+                  .copyWith(
                 counterText: '',
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: 12,
@@ -76,3 +78,22 @@ class TextFieldWidget extends StatelessWidget {
     );
   }
 }
+
+InputDecoration defaultDecor({String? hint, String? labelText}) => InputDecoration(
+      hintText: hint,
+      hintStyle: bodyStyle2.copyWith(color: Colors.grey[300]),
+      labelText: labelText,
+      labelStyle: bodyStyle2,
+      border: const OutlineInputBorder(
+        borderSide: BorderSide(color: primaryColor),
+      ),
+      enabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey),
+      ),
+      focusedBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: primaryColor, width: 2),
+      ),
+      fillColor: Colors.white,
+      // 배경색
+      filled: true,
+    );
