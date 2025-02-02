@@ -13,7 +13,7 @@ import 'greeting/greeting_viewmodel.dart';
 import 'userinfo/user_info_viewmodel.dart';
 
 final introViewModelProvider = StateNotifierProvider<IntroViewModel, IntroState>((ref) {
-  return IntroViewModel(ref.watch(memberRepositoryProvider));
+  return IntroViewModel(ref.watch(memberRepositoryProvider), ref.watch(configRepositoryProvider));
 });
 
 final signInViewModelProvider = StateNotifierProvider<SignInViewModel, SignInState>((ref) {
@@ -31,8 +31,9 @@ final userInfoViewModelProvider = StateNotifierProvider.autoDispose<UserInfoView
 });
 
 final mainViewModelProvider = StateNotifierProvider<MainViewModel, MainState>((ref) {
-  final repository = ref.watch(greetingRepositoryProvider);
-  return MainViewModel(repository);
+  final greetingRepository = ref.watch(greetingRepositoryProvider);
+  final configRepository = ref.watch(configRepositoryProvider);
+  return MainViewModel(greetingRepository, configRepository);
 });
 
 final homeViewModelProvider = StateNotifierProvider<HomeViewModel, AsyncValue<List<ComponentRaw>>>((ref) {

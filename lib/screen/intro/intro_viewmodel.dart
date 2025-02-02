@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wedding/data/raw/signin_raw.dart';
+import 'package:wedding/data/repository/config_repository.dart';
 import 'package:wedding/data/repository/member_repository.dart';
 
 sealed class IntroState {
@@ -17,21 +20,38 @@ class Pass extends IntroState {
   const Pass();
 }
 
-class IntroViewModel extends StateNotifier<IntroState> {
-  final MemberRepository _repository;
+class NetworkError extends IntroState {
+  const NetworkError();
+}
 
-  IntroViewModel(this._repository) : super(const RequiredLogin());
+class IntroViewModel extends StateNotifier<IntroState> {
+  final MemberRepository _memberRepository;
+  final ConfigRepository _configRepository;
+
+  IntroViewModel(this._memberRepository, this._configRepository) : super(const RequiredLogin());
 
   Future<void> checkLoginState() async {
     try {
-      final userInfo = await _repository.findMe();
+      final userInfo = await _memberRepository.findMe();
       if (!userInfo.isUpdatedInfo()) {
         state = const RequiredUserInfo();
       } else {
         state = const Pass();
       }
+    } on DioException {
+      state = const NetworkError();
     } catch (e) {
-      state = const RequiredLogin();
+      try {
+        final deployConfig = await _configRepository.getDeployConfig();
+        if (deployConfig.isDeploy) {
+          await _memberRepository.signIn(SignInRaw(name: deployConfig.testName, phoneNumber: deployConfig.testPhoneNumber));
+          state = const Pass();
+        } else {
+          state = const RequiredLogin();
+        }
+      } on DioException {
+        state = const NetworkError();
+      }
     }
   }
 }

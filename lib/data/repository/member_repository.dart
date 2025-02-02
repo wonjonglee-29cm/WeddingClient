@@ -15,7 +15,6 @@ class MemberRepository {
 
     await _prefs.setInt('id', signInResponse.id);
     await _prefs.setString('name', request.name);
-    await _prefs.setString('phoneNumber', request.phoneNumber);
     await _prefs.setString('accessToken', signInResponse.accessToken);
     await _prefs.setString('refreshToken', signInResponse.refreshToken);
 
@@ -31,16 +30,14 @@ class MemberRepository {
   }) async {
     final id = _prefs.getInt('id');
     final name = _prefs.getString('name');
-    final phoneNumber = _prefs.getString('phoneNumber');
 
-    if (id == null || name == null || phoneNumber == null) {
+    if (id == null || name == null) {
       throw Exception('사용자 정보가 없습니다');
     }
 
     final request = UserInfoRaw(
       id: id,
       name: name,
-      phoneNumber: phoneNumber,
       guestType: guestType,
       isAttendance: isAttendance,
       isCompanion: isCompanion,

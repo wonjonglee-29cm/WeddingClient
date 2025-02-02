@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wedding/data/di_preference.dart';
+import 'package:wedding/design/component/ds_appbar.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/intro/intro_screen.dart';
 import 'package:wedding/screen/main/main_screen.dart';
@@ -14,7 +15,7 @@ void main() async {
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: tertiaryColor,
+      statusBarColor: bgColor,
       statusBarIconBrightness: Brightness.dark,
       statusBarBrightness: Brightness.dark,
     ),
@@ -43,17 +44,14 @@ class WeddingApp extends StatelessWidget {
     return MaterialApp(
       title: 'Wedding Invitation',
       initialRoute: '/',
-      routes: {
-        '/': (context) => const IntroScreen(),
-        '/home': (context) => const MainScreen(),
-        '/event': (context) => const MainScreen(initialTab: 1)
-      },
+      routes: {'/': (context) => const IntroScreen(), '/home': (context) => const MainScreen(), '/event': (context) => const MainScreen(initialTab: 1)},
       theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: mainMaterialColor,
             brightness: Brightness.light,
           ),
           fontFamily: 'NotoSans',
+          appBarTheme: AppBarTheme(systemOverlayStyle: systemStyle)
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wedding/data/di_preference.dart';
 import 'package:wedding/data/repository/components_repository.dart';
+import 'package:wedding/data/repository/config_repository.dart';
 import 'package:wedding/data/repository/greeting_repository.dart';
 import 'package:wedding/data/repository/member_repository.dart';
 import 'package:wedding/data/repository/quiz_repository.dart';
@@ -39,4 +40,8 @@ final greetingRepositoryProvider = Provider<GreetingRepository>((ref) {
     loading: () => throw UnimplementedError("SharedPreferences not initialized"),
     error: (err, stack) => throw Exception("Failed to initialize SharedPreferences"),
   );
+});
+
+final configRepositoryProvider = Provider<ConfigRepository>((ref) {
+  return ConfigRepository();
 });

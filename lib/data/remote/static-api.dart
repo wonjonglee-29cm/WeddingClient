@@ -40,4 +40,9 @@ class StaticApi {
     final dio = await getDio();
     return dio.get('/quiz.json');
   }
+
+  static Future<Response> getConfig() async {
+    final dio = await getDio();
+    return dio.get('/config.json');
+  }
 }

@@ -1,6 +1,6 @@
 {
-    "name": "wedding",
-    "short_name": "wedding",
+    "name": "쫑밍 청첩장",
+    "short_name": "쫑밍 청첩장",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

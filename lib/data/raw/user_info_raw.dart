@@ -1,7 +1,6 @@
 class UserInfoRaw {
   final int id;
   final String? name;
-  final String? phoneNumber;
   final String? guestType;
   final bool? isAttendance;
   final bool? isCompanion;
@@ -11,7 +10,6 @@ class UserInfoRaw {
   UserInfoRaw({
     required this.id,
     required this.name,
-    required this.phoneNumber,
     this.guestType,
     this.isAttendance,
     this.isCompanion,
@@ -30,7 +28,6 @@ class UserInfoRaw {
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
-    'phoneNumber': phoneNumber,
     'guestType': guestType?.toUpperCase(),
     'isAttendance': isAttendance,
     'isCompanion': isCompanion,
@@ -42,7 +39,6 @@ class UserInfoRaw {
     return UserInfoRaw(
       id: json['id'],
       name: json['name'],
-      phoneNumber: json['phoneNumber'],
       guestType: json['guestType'],
       isAttendance: json['attendance'],
       isCompanion: json['companion'],

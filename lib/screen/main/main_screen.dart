@@ -23,10 +23,31 @@ class MainScreen extends HookConsumerWidget {
     const QuizScreen(),
     const MyScreen(),
   ];
+  static const List<BottomNavigationBarItem> _navigationItems = [
+    BottomNavigationBarItem(icon: Icon(Icons.home_outlined, size: 20), label: '초대장'),
+    BottomNavigationBarItem(icon: Icon(Icons.mail_outline, size: 20), label: '예식 안내'),
+    BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/images/quiz.png'), size: 20), label: 'Quiz'),
+    BottomNavigationBarItem(icon: Icon(Icons.person_outline, size: 20), label: '내 정보'),
+  ];
+
+  // 스토어 배포용
+  static final List<Widget> _deployScreens = [
+    const HomeScreen(),
+    const InviteScreen(),
+    const QuizScreen(),
+  ];
+  static const List<BottomNavigationBarItem> _deployNavigationItems = [
+    BottomNavigationBarItem(icon: Icon(Icons.home_outlined, size: 20), label: '초대장'),
+    BottomNavigationBarItem(icon: Icon(Icons.mail_outline, size: 20), label: '예식 안내'),
+    BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/images/quiz.png'), size: 20), label: 'Quiz'),
+  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(mainViewModelProvider);
+
+    final screens = state.isDeploy ? _deployScreens : _screens;
+    final navItems = state.isDeploy ? _deployNavigationItems : _navigationItems;
 
     useEffect(() {
       Future.microtask(() {
@@ -63,16 +84,10 @@ class MainScreen extends HookConsumerWidget {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          toolbarHeight: 0,
-          systemOverlayStyle: systemStyle,
-        ),
         body: SafeArea(
             child: IndexedStack(
           index: currentIndex,
-          children: _screens,
+          children: screens,
         )),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -90,12 +105,7 @@ class MainScreen extends HookConsumerWidget {
           elevation: 10,
           currentIndex: currentIndex,
           onTap: (index) => ref.read(mainViewModelProvider.notifier).updateIndex(index),
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home_outlined, size: 20), label: '초대장'),
-            BottomNavigationBarItem(icon: Icon(Icons.mail_outline, size: 20), label: '예식 안내'),
-            BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/images/quiz.png'), size: 20), label: 'Quiz'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_outline, size: 20), label: '내 정보'),
-          ],
+          items: navItems,
         ),
       ),
     );
