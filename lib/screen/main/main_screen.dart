@@ -24,10 +24,10 @@ class MainScreen extends HookConsumerWidget {
     const MyScreen(),
   ];
   static const List<BottomNavigationBarItem> _navigationItems = [
-    BottomNavigationBarItem(icon: Icon(Icons.home_outlined, size: 20), label: '초대장'),
-    BottomNavigationBarItem(icon: Icon(Icons.mail_outline, size: 20), label: '예식 안내'),
-    BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/images/quiz.png'), size: 20), label: 'Quiz'),
-    BottomNavigationBarItem(icon: Icon(Icons.person_outline, size: 20), label: '내 정보'),
+    BottomNavigationBarItem(icon: Icon(Icons.mail_outline, size: 20), label: '초대장'),
+    BottomNavigationBarItem(icon: Icon(Icons.event_note_outlined, size: 20), label: '예식 안내'),
+    BottomNavigationBarItem(icon: Icon(Icons.emoji_events_outlined, size: 20), label: 'Quiz'),
+    BottomNavigationBarItem(icon: Icon(Icons.mode_edit_outlined, size: 20), label: '내 정보'),
   ];
 
   // 스토어 배포용
@@ -37,9 +37,9 @@ class MainScreen extends HookConsumerWidget {
     const QuizScreen(),
   ];
   static const List<BottomNavigationBarItem> _deployNavigationItems = [
-    BottomNavigationBarItem(icon: Icon(Icons.home_outlined, size: 20), label: '초대장'),
-    BottomNavigationBarItem(icon: Icon(Icons.mail_outline, size: 20), label: '예식 안내'),
-    BottomNavigationBarItem(icon: ImageIcon(AssetImage('assets/images/quiz.png'), size: 20), label: 'Quiz'),
+    BottomNavigationBarItem(icon: Icon(Icons.mail_outline, size: 20), label: '초대장'),
+    BottomNavigationBarItem(icon: Icon(Icons.event_note_outlined, size: 20), label: '예식 안내'),
+    BottomNavigationBarItem(icon: Icon(Icons.emoji_events_outlined, size: 20), label: 'Quiz'),
   ];
 
   @override
