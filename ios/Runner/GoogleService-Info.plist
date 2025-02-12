@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>ming.jong.wedding</string>
+	<string>ming.jong.weddingapp</string>
 	<key>PROJECT_ID</key>
 	<string>jong-ming-wedding</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:930992715418:ios:e4a791f4264aa6a9955123</string>
+	<string>1:930992715418:ios:38e2e6c5f862c7e0955123</string>
 </dict>
 </plist>
