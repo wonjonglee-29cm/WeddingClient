@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wedding/data/raw/signin_raw.dart';
 import 'package:wedding/data/repository/config_repository.dart';
@@ -43,7 +44,9 @@ class IntroViewModel extends StateNotifier<IntroState> {
     } catch (e) {
       try {
         final deployConfig = await _configRepository.getDeployConfig();
-        if (deployConfig.isDeploy) {
+        if (kIsWeb) {
+          state = const RequiredLogin();
+        } else if (deployConfig.isDeploy) {
           await _memberRepository.signIn(SignInRaw(name: deployConfig.testName, phoneNumber: deployConfig.testPhoneNumber));
           state = const Pass();
         } else {

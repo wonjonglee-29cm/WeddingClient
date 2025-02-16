@@ -49,7 +49,4 @@
             <data android:scheme="https" />
         </intent>
     </queries>
-
-    <meta-data android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyCpP2Pu_RllA4r5_Ic0lVGFrQ9x7tnht-0"/>
 </manifest>

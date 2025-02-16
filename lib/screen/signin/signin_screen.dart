@@ -92,6 +92,7 @@ class _SignScreenState extends ConsumerState<SignInScreen> {
                 child: Text(
                   state.error ?? '',
                   style: bodyStyle2.copyWith(color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
               ),
               const Spacer(),

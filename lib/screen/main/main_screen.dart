@@ -1,8 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wedding/design/anim/ds_slide_route.dart';
-import 'package:wedding/design/component/ds_appbar.dart';
 import 'package:wedding/design/ds_foundation.dart';
 import 'package:wedding/screen/di_viewmodel.dart';
 import 'package:wedding/screen/greeting/greeting_screen.dart';
@@ -10,6 +10,8 @@ import 'package:wedding/screen/home/home_screen.dart';
 import 'package:wedding/screen/invite/invite_screen.dart';
 import 'package:wedding/screen/my/my_screen.dart';
 import 'package:wedding/screen/quiz/quiz_screen.dart';
+import 'package:wedding/utils/device_utils.dart';
+import "dart:html" as html;
 
 class MainScreen extends HookConsumerWidget {
   final int? initialTab;
@@ -42,6 +44,42 @@ class MainScreen extends HookConsumerWidget {
     BottomNavigationBarItem(icon: Icon(Icons.emoji_events_outlined, size: 20), label: 'Quiz'),
   ];
 
+  void _showAppInstallDialog(BuildContext context) {
+    final platform = getPlatform();
+
+    // 모바일 플랫폼이 아닌 경우 팝업 표시하지 않음
+    if (platform != 'Android' && platform != 'iOS') return;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('앱으로 보기'),
+        content: const Text('더 나은 사용자 경험을 위해 앱으로 보시는 것을 추천드립니다.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('나중에'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              if (platform == 'Android') {
+                html.window.location.href = 'market://details?id=ming.jong.wedding';
+              } else if (platform == 'iOS') {
+                html.window.location.href = 'https://apps.apple.com/app/id6741857330';
+              }
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: primaryColor,
+            ),
+            child: const Text('앱 설치하기'),
+          ),
+        ],
+      ),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(mainViewModelProvider);
@@ -51,6 +89,9 @@ class MainScreen extends HookConsumerWidget {
 
     useEffect(() {
       Future.microtask(() {
+        if (kIsWeb) {
+          _showAppInstallDialog(context);
+        }
         if (!state.isWriteGreeting) {
           Navigator.of(context).push(SlideUpRoute(page: const GreetingScreen()));
         }
