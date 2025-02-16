@@ -57,9 +57,16 @@ class MemberRepository {
     final lastAttempt = getLastAttemptTime();
 
     if (attempts >= 5 && lastAttempt != null) {
-      final lockoutDuration = Duration(hours: 1);
+      const lockoutDuration = Duration(minutes: 1);
       final now = DateTime.now();
-      return now.difference(lastAttempt) < lockoutDuration;
+
+      // 1시간이 지났다면 실패 횟수 초기화
+      if (now.difference(lastAttempt) >= lockoutDuration) {
+        resetFailedAttempts();
+        return false;
+      }
+
+      return true;
     }
     return false;
   }

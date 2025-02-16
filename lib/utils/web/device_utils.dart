@@ -1,6 +1,6 @@
-import "dart:html" as html;
+import 'package:universal_html/html.dart' as html;
 
-String getPlatform() {
+String getPlatformInWeb() {
   final userAgent = html.window.navigator.userAgent.toLowerCase();
 
   if (userAgent.contains('android')) {
@@ -16,4 +16,12 @@ String getPlatform() {
   }
 
   return 'Unknown';
+}
+
+void launchAppStoreInWeb(String platform) {
+  if (platform == 'Android') {
+    html.window.location.href = 'market://details?id=ming.jong.wedding';
+  } else if (platform == 'iOS') {
+    html.window.location.href = 'https://apps.apple.com/app/id6741857330';
+  }
 }

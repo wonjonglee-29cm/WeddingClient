@@ -10,8 +10,7 @@ import 'package:wedding/screen/home/home_screen.dart';
 import 'package:wedding/screen/invite/invite_screen.dart';
 import 'package:wedding/screen/my/my_screen.dart';
 import 'package:wedding/screen/quiz/quiz_screen.dart';
-import 'package:wedding/utils/device_utils.dart';
-import "dart:html" as html;
+import 'package:wedding/utils/web/device_utils.dart';
 
 class MainScreen extends HookConsumerWidget {
   final int? initialTab;
@@ -45,7 +44,9 @@ class MainScreen extends HookConsumerWidget {
   ];
 
   void _showAppInstallDialog(BuildContext context) {
-    final platform = getPlatform();
+    if (!kIsWeb) return;  // 웹이 아니면 다이얼로그를 보여주지 않음
+
+    final platform = getPlatformInWeb();
 
     // 모바일 플랫폼이 아닌 경우 팝업 표시하지 않음
     if (platform != 'Android' && platform != 'iOS') return;
@@ -54,7 +55,7 @@ class MainScreen extends HookConsumerWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('앱으로 보기'),
-        content: const Text('더 나은 사용자 경험을 위해 앱으로 보시는 것을 추천드립니다.'),
+        content: const Text('더 나은 경험을 위해 앱으로 보시는 것을 추천드립니다.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -63,11 +64,7 @@ class MainScreen extends HookConsumerWidget {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              if (platform == 'Android') {
-                html.window.location.href = 'market://details?id=ming.jong.wedding';
-              } else if (platform == 'iOS') {
-                html.window.location.href = 'https://apps.apple.com/app/id6741857330';
-              }
+              launchAppStoreInWeb(platform);
             },
             style: TextButton.styleFrom(
               foregroundColor: primaryColor,
@@ -78,7 +75,6 @@ class MainScreen extends HookConsumerWidget {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

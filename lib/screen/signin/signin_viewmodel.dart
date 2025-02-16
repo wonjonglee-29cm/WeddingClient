@@ -37,10 +37,20 @@ class SignInViewModel extends StateNotifier<SignInState> {
   SignInViewModel(this._repository) : super(SignInState());
 
   Future<void> signIn(String name, String phoneNumber) async {
-    // 로그인 잠금 상태 확인
+    // 잠금 상태 체크 전에 1시간이 지났는지 확인
+    final lastAttempt = _repository.getLastAttemptTime();
+    if (lastAttempt != null) {
+      const lockoutDuration = Duration(minutes: 1);
+      final now = DateTime.now();
+      if (now.difference(lastAttempt) >= lockoutDuration) {
+        await _repository.resetFailedAttempts();
+      }
+    }
+
+    // 잠금 상태 확인
     if (_repository.isLoginLocked()) {
       state = state.copyWith(
-        error: '로그인 시도가 5회 실패하여 1시간 동안 로그인이 제한됩니다.\n남은 시간: ${_repository.getRemainingLockoutTime()}',
+        error: '로그인 시도가 5회 실패하여 1시간 동안 로그인이 제한됩니다.\n${_repository.getRemainingLockoutTime()} 후에 다시 시도해주세요.',
       );
       return;
     }
@@ -66,7 +76,7 @@ class SignInViewModel extends StateNotifier<SignInState> {
 
       String errorMessage = '하객 정보가 없습니다. 신랑 혹은 신부에게 연락해주세요.';
       if (failedAttempts >= 5) {
-        errorMessage = '로그인 시도가 5회 실패하여 1시간 동안 로그인이 제한됩니다.\n남은 시간: ${_repository.getRemainingLockoutTime()}';
+        errorMessage = '로그인 시도가 5회 실패하여 1시간 동안 로그인이 제한됩니다.\n${_repository.getRemainingLockoutTime()} 후에 다시 시도해주세요.';
       } else {
         errorMessage += '\n남은 시도 횟수: ${5 - failedAttempts}회';
       }

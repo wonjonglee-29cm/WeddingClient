@@ -44,7 +44,7 @@ class IntroViewModel extends StateNotifier<IntroState> {
     } catch (e) {
       try {
         final deployConfig = await _configRepository.getDeployConfig();
-        if (kIsWeb) {
+        if (!kIsWeb) {
           state = const RequiredLogin();
         } else if (deployConfig.isDeploy) {
           await _memberRepository.signIn(SignInRaw(name: deployConfig.testName, phoneNumber: deployConfig.testPhoneNumber));
