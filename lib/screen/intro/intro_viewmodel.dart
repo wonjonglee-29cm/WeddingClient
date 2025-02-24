@@ -39,12 +39,10 @@ class IntroViewModel extends StateNotifier<IntroState> {
       } else {
         state = const Pass();
       }
-    } on DioException {
-      state = const NetworkError();
     } catch (e) {
       try {
         final deployConfig = await _configRepository.getDeployConfig();
-        if (!kIsWeb) {
+        if (kIsWeb) {
           state = const RequiredLogin();
         } else if (deployConfig.isDeploy) {
           await _memberRepository.signIn(SignInRaw(name: deployConfig.testName, phoneNumber: deployConfig.testPhoneNumber));

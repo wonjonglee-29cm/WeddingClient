@@ -81,7 +81,7 @@ class MainScreen extends HookConsumerWidget {
     final state = ref.watch(mainViewModelProvider);
 
     final screens = state.isDeploy ? _deployScreens : _screens;
-    final navItems = state.isDeploy ? _deployNavigationItems : _navigationItems;
+    final navItems = state.isDeploy ? (kIsWeb ? _navigationItems: _deployNavigationItems) : _navigationItems;
 
     useEffect(() {
       Future.microtask(() {
