@@ -33,12 +33,10 @@ jobs:
 
       - name: Create S3 bucket if not exists
         run: |
-          aws s3 mb s3://jeongminkyeong.leewonjong.com || true
-
+          aws s3 mb s3://${{ secrets.S3_BUCKET }} || true
       - name: Sync build to S3
         run: |
-          aws s3 sync build/web s3://jeongminkyeong.leewonjong.com
-
+          aws s3 sync build/web s3://${{ secrets.S3_BUCKET }}
       - name: Configure S3 website
         run: |
-          aws s3 website s3://jeongminkyeong.leewonjong.com --index-document index.html
+          aws s3 website s3://${{ secrets.S3_BUCKET }} --index-document index.html
