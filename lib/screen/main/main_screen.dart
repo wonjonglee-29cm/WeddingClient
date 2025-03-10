@@ -80,7 +80,7 @@ class MainScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(mainViewModelProvider);
 
-    final screens = state.isDeploy ? _deployScreens : _screens;
+    final screens = state.isDeploy ? (kIsWeb ? _screens: _deployScreens) : _screens;
     final navItems = state.isDeploy ? (kIsWeb ? _navigationItems: _deployNavigationItems) : _navigationItems;
 
     useEffect(() {
