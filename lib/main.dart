@@ -50,7 +50,7 @@ class WeddingApp extends StatelessWidget {
             primarySwatch: mainMaterialColor,
             brightness: Brightness.light,
           ),
-          fontFamily: 'NotoSans',
+          fontFamily: 'Pretendard',
           appBarTheme: AppBarTheme(systemOverlayStyle: systemStyle)
       ),
     );

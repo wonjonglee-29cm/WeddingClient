@@ -106,11 +106,11 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
   fonts:
-    - family: NotoSans
+    - family: Pretendard
       fonts:
-        - asset: assets/fonts/NotoSans-Bold.ttf
-        - asset: assets/fonts/NotoSans-Medium.ttf
-        - asset: assets/fonts/NotoSans-Light.ttf
+        - asset: assets/fonts/Pretendard-Bold.otf
+        - asset: assets/fonts/Pretendard-Medium.otf
+        - asset: assets/fonts/Pretendard-Light.otf
   assets:
     - assets/fonts/
     - assets/images/
