@@ -77,7 +77,7 @@ class QuizViewModel extends StateNotifier<QuizState> {
 
     try {
       _isSubmitting = true;
-      await _repository.submitQuizAnswer(quizId, answerOrder);
+      await _repository.submitQuizAnswer(quizId, answerOrder + 1);
 
       if (state case Success s) {
         final updatedItems = s.items.map((quiz) {
