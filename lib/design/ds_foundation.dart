@@ -17,7 +17,6 @@ const TextStyle whiteBodyStyle1 = TextStyle(fontSize: 16, fontWeight: FontWeight
 const TextStyle whiteBodyStyle2 = TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.white);
 
 const MaterialColor mainMaterialColor = Colors.blueGrey;
-const Color primaryColor = Color(0xFFE34358);
-const Color secondaryColor = Color(0xFFF8CDD2);
-const Color tertiaryColor = Color(0xFFFEFAFA);
-const Color bgColor = Color(0xFFFEFEFD);
+const Color primaryColor = Color(0xFF7B8424);
+const Color secondaryColor = Color(0xFFBCC190);
+const Color bgColor = Color(0xFFFBFBF7);
