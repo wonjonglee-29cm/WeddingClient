@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wedding/design/anim/ds_slide_route.dart';
@@ -44,7 +47,7 @@ class MainScreen extends HookConsumerWidget {
   ];
 
   void _showAppInstallDialog(BuildContext context) {
-    if (!kIsWeb) return;  // 웹이 아니면 다이얼로그를 보여주지 않음
+    if (!kIsWeb) return; // 웹이 아니면 다이얼로그를 보여주지 않음
 
     final platform = getPlatformInWeb();
 
@@ -80,8 +83,8 @@ class MainScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(mainViewModelProvider);
 
-    final screens = state.isDeploy ? (kIsWeb ? _screens: _deployScreens) : _screens;
-    final navItems = state.isDeploy ? (kIsWeb ? _navigationItems: _deployNavigationItems) : _navigationItems;
+    final screens = state.isDeploy ? (kIsWeb ? _screens : _deployScreens) : _screens;
+    final navItems = state.isDeploy ? (kIsWeb ? _navigationItems : _deployNavigationItems) : _navigationItems;
 
     useEffect(() {
       Future.microtask(() {
@@ -102,25 +105,25 @@ class MainScreen extends HookConsumerWidget {
       return null;
     }, []);
 
+    // 웹 환경에서 뒤로가기 버튼 처리를 위한 상태 변수
+    final lastPressed = useState<DateTime?>(null);
+
+    // 웹 환경에서 뒤로가기 이벤트 처리
+    useEffect(() {
+      StreamSubscription? subscription;
+
+      if (kIsWeb) {
+        SystemNavigator.pop();
+      }
+
+      return () {
+        subscription?.cancel();
+      };
+    }, []);
+
     final currentIndex = state.currentIndex;
-
-    return WillPopScope(
-      onWillPop: () async {
-        final now = DateTime.now();
-
-        if (_lastPressed == null || now.difference(_lastPressed!) > const Duration(seconds: 2)) {
-          _lastPressed = now;
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('뒤로가기를 한번 더 누르면 종료됩니다.'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-          return false;
-        }
-        return true;
-      },
-      child: Scaffold(
+    if (kIsWeb) {
+      return Scaffold(
         body: SafeArea(
             child: IndexedStack(
           index: currentIndex,
@@ -144,7 +147,50 @@ class MainScreen extends HookConsumerWidget {
           onTap: (index) => ref.read(mainViewModelProvider.notifier).updateIndex(index),
           items: navItems,
         ),
-      ),
-    );
+      );
+    } else {
+      return WillPopScope(
+        onWillPop: () async {
+          final now = DateTime.now();
+
+          if (_lastPressed == null || now.difference(_lastPressed!) > const Duration(seconds: 2)) {
+            _lastPressed = now;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('뒤로가기를 한번 더 누르면 종료됩니다.'),
+                duration: Duration(seconds: 2),
+              ),
+            );
+            return false;
+          }
+          return true;
+        },
+        child: Scaffold(
+          body: SafeArea(
+              child: IndexedStack(
+            index: currentIndex,
+            children: screens,
+          )),
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            selectedIconTheme: const IconThemeData(
+              size: 24,
+            ),
+            unselectedIconTheme: const IconThemeData(
+              size: 20,
+            ),
+            selectedFontSize: 14,
+            unselectedFontSize: 12,
+            selectedItemColor: primaryColor,
+            unselectedItemColor: Colors.black,
+            backgroundColor: Colors.white,
+            elevation: 10,
+            currentIndex: currentIndex,
+            onTap: (index) => ref.read(mainViewModelProvider.notifier).updateIndex(index),
+            items: navItems,
+          ),
+        ),
+      );
+    }
   }
 }

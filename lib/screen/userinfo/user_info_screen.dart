@@ -46,7 +46,11 @@ class UserInfoScreen extends HookConsumerWidget {
     }, [state.error]);
 
     return Scaffold(
-      appBar: closeAppBar(context, '참석 정보', onPressed: screenType == UserInfoScreenType.init ? () => SystemNavigator.pop() : () => Navigator.pop(context)),
+      appBar: closeAppBar(context, '참석 정보', onPressed: screenType == UserInfoScreenType.init ? () =>
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const MainScreen()),
+          ) : () => Navigator.pop(context)),
       body: SafeArea(
         child: Column(
           children: [
