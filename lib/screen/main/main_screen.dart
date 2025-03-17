@@ -85,9 +85,9 @@ class MainScreen extends HookConsumerWidget {
 
     useEffect(() {
       Future.microtask(() {
-        if (kIsWeb) {
-          _showAppInstallDialog(context);
-        }
+        // if (kIsWeb) {
+        //   _showAppInstallDialog(context);
+        // }
         if (!state.isWriteGreeting) {
           Navigator.of(context).push(SlideUpRoute(page: const GreetingScreen()));
         }
