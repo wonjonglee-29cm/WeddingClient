@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:wedding/design/component/ds_appbar.dart';
@@ -63,6 +62,11 @@ class UserInfoScreen extends HookConsumerWidget {
                     itemsGap,
                     const SizedBox(
                       width: double.infinity,
+                      child: Text('2025년 5월 10일(토) 점심 12시', style: titleStyle2, textAlign: TextAlign.center),
+                    ),
+                    itemsGap,
+                    const SizedBox(
+                      width: double.infinity,
                       child: Text('참석의 부담은 가지지 말아주시고,\n정성껏 준비하기 위해 여쭙는 것이니\n참석 정보를 알려주시면 감사하겠습니다.', style: bodyStyle1, textAlign: TextAlign.center),
                     ),
                     itemsGap,
@@ -123,7 +127,7 @@ class UserInfoScreen extends HookConsumerWidget {
                         }
                       }
                     : null,
-                text: '제출할게요',
+                text: screenType == UserInfoScreenType.init ? '제출할게요' : '수정할게요',
                 isEnabled: state.isFormValid,
               ),
             ),

@@ -74,7 +74,7 @@ class SignInViewModel extends StateNotifier<SignInState> {
       // 현재 실패 횟수 확인
       final failedAttempts = _repository.getFailedAttempts();
 
-      String errorMessage = '하객 정보가 없습니다. 신랑 혹은 신부에게 연락해주세요.';
+      String errorMessage = '신랑 혹은 신부에게 전달받은 올바른 인증코드를 입력해주세요.';
       if (failedAttempts >= 5) {
         errorMessage = '로그인 시도가 5회 실패하여 1시간 동안 로그인이 제한됩니다.\n${_repository.getRemainingLockoutTime()} 후에 다시 시도해주세요.';
       } else {

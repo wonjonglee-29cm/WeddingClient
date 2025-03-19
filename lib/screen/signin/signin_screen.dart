@@ -73,12 +73,12 @@ class _SignScreenState extends ConsumerState<SignInScreen> {
                     itemsGap,
                     TextFieldWidget(
                       controller: _passwordController,
-                      decoration: defaultDecor(hint: '0000', labelText: '전화번호 뒷자리를 입력해주세요 (4자리)'),
+                      decoration: defaultDecor(hint: '0000', labelText: '인증코드를 입력해주세요 (4자리)'),
                       keyboardType: TextInputType.number,
                       maxLength: 4,
                       obscureText: true,
                       validator: (value) {
-                        if (value?.isEmpty ?? true) return '전화번호 뒷자리를 입력해주세요';
+                        if (value?.isEmpty ?? true) return '올바른 인증코드를 입력해주세요';
                         if (value?.length != 4) return '4자리의 숫자를 입력해야 합니다';
                         return null;
                       },
