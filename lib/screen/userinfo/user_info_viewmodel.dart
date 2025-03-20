@@ -86,6 +86,10 @@ class UserInfoViewModel extends StateNotifier<UserInfoState> {
 
   void updateWillAttend(bool? value) {
     state = state.copyWith(willAttend: value);
+    if (value == false) {
+      updateHasCompanion(false);
+      updateWillEat(false);
+    }
   }
 
   void updateGuestType(GuestType? value) {

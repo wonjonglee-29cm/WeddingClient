@@ -45,11 +45,13 @@ class UserInfoScreen extends HookConsumerWidget {
     }, [state.error]);
 
     return Scaffold(
-      appBar: closeAppBar(context, '참석 정보', onPressed: screenType == UserInfoScreenType.init ? () =>
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const MainScreen()),
-          ) : () => Navigator.pop(context)),
+      appBar: closeAppBar(context, '참석 정보',
+          onPressed: screenType == UserInfoScreenType.init
+              ? () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MainScreen()),
+                  )
+              : () => Navigator.pop(context)),
       body: SafeArea(
         child: Column(
           children: [
@@ -83,13 +85,15 @@ class UserInfoScreen extends HookConsumerWidget {
                         onChanged: (value) => viewModel.updateGuestType(value),
                       ),
                     ),
-                    buildSelectionButtons('식사를 하고 가시나요?', {true: '식사 함', false: '식사 안함'}, state.willEat, (value) => viewModel.updateWillEat(value), description: '(식사 이후 샴페인과 함께 경품 타임이 있습니다)'),
-                    buildSelectionButtons(
-                      '동행인이 있나요?',
-                      {true: '있음', false: '없음'},
-                      state.hasCompanion,
-                      (value) => viewModel.updateHasCompanion(value),
-                    ),
+                    if (state.willAttend != false)
+                      buildSelectionButtons('식사를 하고 가시나요?', {true: '식사 함', false: '식사 안함'}, state.willEat, (value) => viewModel.updateWillEat(value), description: '(식사 이후 샴페인과 함께 경품 타임이 있습니다)'),
+                    if (state.willAttend != false)
+                      buildSelectionButtons(
+                        '동행인이 있나요?',
+                        {true: '있음', false: '없음'},
+                        state.hasCompanion,
+                        (value) => viewModel.updateHasCompanion(value),
+                      ),
                     if (state.hasCompanion == true)
                       buildSection(
                           '같이 오는 분은 총 몇명인가요?',
