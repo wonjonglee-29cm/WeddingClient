@@ -35,7 +35,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -64,7 +64,7 @@ jobs:
       # 키 파일 설정
       - name: Setup Keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/jongming.jks
+          echo '${{ secrets.KEYSTORE_BASE64 }}' | base64 --decode > android/jongming.jks
           echo "storeFile=../jongming.jks" > android/key.properties
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
           echo "storePassword=${{ secrets.KEY_STORE_PASSWORD }}" >> android/key.properties
