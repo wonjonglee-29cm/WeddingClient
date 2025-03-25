@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=3.3.1 <4.0.0'
@@ -120,7 +120,7 @@ flutter_launcher_icons:
   android: "launcher_icon"  # android에서 사용할 아이콘 이름
   ios: true  # ios에서는 기본 이름 사용
   image_path: "assets/icon/icon.png"  # 사용할 아이콘 이미지 경로
-  min_sdk_android: 21  # 안드로이드 최소 SDK 버전
+  min_sdk_android: 23  # 안드로이드 최소 SDK 버전
   name: "쫑밍 청첩장"
   web:
     generate: true

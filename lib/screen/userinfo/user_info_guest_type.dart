@@ -1,4 +1,3 @@
-
 enum GuestType {
   BOTH('둘 다'),
   GROOM('신랑'),
@@ -10,9 +9,13 @@ enum GuestType {
 
   static GuestType? fromString(String? value) {
     if (value == null) return null;
-    return GuestType.values.firstWhere(
-          (type) => type.name == value.toLowerCase(),
-      orElse: () => GuestType.BOTH,
-    );
+    
+    final upperValue = value.toUpperCase();
+    for (var type in GuestType.values) {
+      if (type.name == upperValue) {
+        return type;
+      }
+    }
+    return GuestType.BOTH;
   }
 }
