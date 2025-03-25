@@ -1,0 +1,25 @@
+default_platform(:android)
+
+platform :android do
+  desc "Deploy to Play Store"
+  lane :deploy do |options|
+    version_code = options[:version_code]
+    version_name = options[:version_name]
+    
+    gradle(
+      task: "clean bundleRelease",
+      properties: {
+        "android.injected.version.code" => version_code,
+        "android.injected.version.name" => version_name
+      }
+    )
+    
+    upload_to_play_store(
+      track: 'production',
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end

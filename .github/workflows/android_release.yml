@@ -1,0 +1,87 @@
+name: Android Play Store Release
+
+on:
+  # 수동 트리거 가능하도록 설정
+  workflow_dispatch:
+    inputs:
+      version_code:
+        description: '버전 코드 (숫자)'
+        required: true
+        default: ''
+      version_name:
+        description: '버전 이름 (1.0.0 형식)'
+        required: true
+        default: ''
+      release_notes:
+        description: '릴리스 노트'
+        required: false
+        default: ''
+  
+  # 태그 생성 시 자동 배포 (선택적)
+  # push:
+  #   tags:
+  #     - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5'
+          channel: 'stable'
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Install Fastlane
+        run: gem install fastlane
+
+      # 버전 업데이트 (pubspec.yaml 파일 업데이트)
+      - name: Update version in pubspec.yaml
+        run: |
+          sed -i "s/version: .*/version: ${{ github.event.inputs.version_name }}+${{ github.event.inputs.version_code }}/" pubspec.yaml
+          cat pubspec.yaml
+
+      # 키 파일 설정
+      - name: Setup Keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/jongming.jks
+          echo "storeFile=../jongming.jks" > android/key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
+          echo "storePassword=${{ secrets.KEY_STORE_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+
+      # AAB 빌드
+      - name: Build AAB
+        run: flutter build appbundle --release
+
+      # Google Play에 배포
+      - name: Upload to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
+          packageName: ming.jong.wedding
+          releaseFiles: build/app/outputs/bundle/release/app-release.aab
+          track: production
+          status: completed
+          releaseNotes: ${{ github.event.inputs.release_notes }}
+          whatsNewDirectory: android/fastlane/metadata/android/en-US/changelogs/
