@@ -31,11 +31,45 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Java
+      # 자바 캐싱
+      - name: Setup Java with cache
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
+          cache: 'gradle'
+
+      # Flutter SDK 캐싱
+      - name: Flutter SDK 캐시
+        uses: actions/cache@v3
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.os }}-flutter-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+
+      # Pub 캐시 설정
+      - name: Setup Pub Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.pub-cache
+            ${{ env.GITHUB_WORKSPACE }}/.dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      # Gradle 캐시 설정
+      - name: Gradle 캐시
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.android/build-cache
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -46,7 +80,8 @@ jobs:
       - name: Get Flutter dependencies
         run: flutter pub get
 
-      - name: Setup Ruby
+      # Ruby Gems 캐싱 (Fastlane)
+      - name: Setup Ruby with cache
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
@@ -70,9 +105,10 @@ jobs:
           echo "storePassword=${{ secrets.KEY_STORE_PASSWORD }}" >> android/key.properties
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
 
-      # AAB 빌드
+      # AAB 빌드 (캐시 활용)
       - name: Build AAB
-        run: flutter build appbundle --release
+        run: |
+          flutter build appbundle --release --build-number=${{ github.event.inputs.version_code }} --build-name=${{ github.event.inputs.version_name }}
 
       # Google Play에 배포
       - name: Upload to Google Play
